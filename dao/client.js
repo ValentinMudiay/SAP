@@ -24,8 +24,7 @@ const db = {
 
     setTokens: (client, spotify_token, refresh_token) => {
         const q = 
-            "INSERT INTO client(client_id, spotify_token, refresh_token) " +
-            "VALUES($1, $2, $3)";
+            "INSERT INTO client(client_id, spotify_token, refresh_token) VALUES($1, $2, $3)";
         return query(q, [client, spotify_token, refresh_token]);
     },
 };

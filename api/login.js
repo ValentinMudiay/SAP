@@ -1,100 +1,59 @@
 const router         = require("express").Router(),
-    //   redis          = require("../services/redis"),
-      db             = require("../dao/client"),
       spotifyService = require("../services/spotify"),
-      log            = require("../services/log");
+      log            = require("../services/log"),
+      successRoute   = "/success",
+      errorRoute     = "/error";
 
 router.get("/", (req, res) => {
-    const uuidKey     = spotifyService.getUuidKey(),
-          cookieUuid  = req.cookies ? req.cookies[uuidKey] : ""; // '0bf7c86b-7f1a-4352-8aa8-69e7f30f7176'
-
-    if(cookieUuid) {
-        log.debug("GET /login -> Found cookie uuid");
-
-        log.debug("GET /login -> Checking db for uuid");
-        db.getToken(cookieUuid)
-        .then(result => {
-            const data = result.rows[0];
-            log.debug(data ? "GET /login -> Found uuid in db" : 
-                             `GET /login -> No record in db with uuid = ${cookieUuid}`);
-
-            // If successfully retrieved a token
-            // Begin logged in session and redir to next page
-            if(data) {
-                log.debug("GET /login -> Redirecting to /success");
-                res.redirect("/success");
-            }
-            // else get token from spotify
-            else {
-                const { url, state } = spotifyService.getAuthUrlWithState();
-
-                log.debug("GET /login  ->", `Set cookie {${spotifyService.getStateKey()}: ${state}}`);
-                res.cookie(spotifyService.getStateKey(), state);
-
-                log.debug("GET /login  ->", `Redirecting to ${url}`);
-                res.redirect(url);
-            }
-        })
-        .catch(ex => {
-            log.debug("GET /login -> Caught error getting token from db", ex);
-            log.debug("GET /login -> Redirecting to /error");
-            res.redirect("/error");
-        });
-
+    if(req.session.access_token) {
+        log.debug(`GET /login -> Existing token found. Redirecting to ${successRoute}`);
+        res.redirect(successRoute);
         return;
     }
-    
-    log.debug("GET /login -> No uuid cookie found on client, preparing to authenticate via Spotify.");
+        
+    log.debug("GET /login -> No session token found, going to authenticate via Spotify.");
     const { url, state } = spotifyService.getAuthUrlWithState();
 
-    log.debug("GET /login  ->", `Set cookie {${spotifyService.getStateKey()}: ${state}}`);
-    res.cookie(spotifyService.getStateKey(), state);
+    log.debug("GET /login  ->", `Set session {state: ${state}}`);
+    req.session.state = state;
 
     log.debug("GET /login  ->", `Redirecting to ${url}`);
     res.redirect(url);
 });
 
 router.get("/callback", (req, res) => {
-    const stateKey          = spotifyService.getStateKey(),
-          cookieState       = req.cookies ? req.cookies[stateKey] : "",
+    const sessionState      = req.session.state,
           requestState      = req.query.state,
           requestCode       = req.query.code;
 
     log.debug("GET /callback -> Params recieved from Spotify", {
         "code"           : requestCode,
-        "storedState"    : cookieState,
+        "storedState"    : sessionState,
         "recievedState"  : requestState
     });
 
-    if(cookieState !== requestState) {
-        log.debug("GET /callback -> State mismatch: redirecting to /error");
-        res.clearCookie(stateKey);
+    if(sessionState !== requestState) {
+        log.debug(`GET /callback -> State mismatch: redirecting to ${errorRoute}`);
+        delete req.session.state;
 
-        log.debug("GET /callback -> Refirecting to /error");
-        res.redirect("/error");
+        log.debug(`GET /callback -> Refirecting to ${errorRoute}`);
+        res.redirect(errorRoute);
         return;
     }
 
     spotifyService.getTokens(requestCode)
     .then(tokens => {
-        const id = spotifyService.getUuid();
+        log.debug("GET /callback -> Writing tokens to session");
+        req.session.access_token    = tokens.access_token;
+        req.session.refresh_token   = tokens.refresh_token;
 
-        log.debug("GET /callback -> Writing tokens to db");
-        return db.setTokens(id, tokens.access_token, tokens.refresh_token)
-            .then(dbResult => {
-                res.cookie(spotifyService.getUuidKey(), id);
-                return tokens;
-            })
-    })
-    .then(tokens => spotifyService.getProfile(tokens.access_token))
-    .then(profile => {
-        res.clearCookie(stateKey);
-        res.json(profile);
+        log.debug(`GET /login -> Redirecting to ${successRoute}`);
+        res.redirect(successRoute);
     })
     .catch(error => {
         log.debug("GET /callback -> Error in promise chain getting token from Spotify\n", error);
-        log.debug("GET /callback -> Refirecting to /error");
-        res.redirect("/error");
+        log.debug(`GET /callback -> Refirecting to ${errorRoute}`);
+        res.redirect(errorRoute);
     });
 });
 

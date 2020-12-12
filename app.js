@@ -1,15 +1,15 @@
 require("dotenv").config();
 
-const cParser = require("cookie-parser");
-const config  = require("./config/app");
+const helmet  = require("helmet"),
+      config  = require("./config/app"),
+      authApi = require("./api/login"),
+      rootApi = require("./api/index"),
+      express = require("express"),
+      app     = express();
 
-const authApi = require("./api/login");
-const rootApi = require("./api/index");
-
-const express = require("express");
-const app     = express();
-
-app.use(cParser());
+app.use(config.session);
+app.disable("x-powered-by");
+app.use(helmet());
 app.use(rootApi);
 app.use("/login", authApi);
 

@@ -6,8 +6,12 @@ const log   = require("../services/log.js");
 router.get("/", (req, res) => {
     const file = path.join(__dirname, "../public", "index.html");
 
+    if(req.session.count) req.session.count++
+    else req.session.count = 1;
+
     log.debug("GET /  ->", `res.sendFile ${file}`);
-    res.sendFile(file);
+    // res.sendFile(file);
+    res.json(req.session);
 });
 
 router.get("/error", (req, res) => {
