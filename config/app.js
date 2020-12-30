@@ -8,7 +8,7 @@ const { Pool }  = require("pg"),
 module.exports = ({
     debug:          process.env.DEBUG,
     port:           process.env.PORT || 3000,
-    origin:         "http://localhost:3001",
+    origin:         "https://saveaplaylist.com",
     
     init: function() {
         const sessionConfig = {
