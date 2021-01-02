@@ -12,7 +12,7 @@ pipeline {
 
     stage("Start application") {
       steps {
-        pm2 start /home/sap/saveaplaylist.com/app.js --watch
+       sh -c "pm2 start /home/sap/saveaplaylist.com/app.js --watch"
       }
     }
     
