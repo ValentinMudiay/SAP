@@ -4,23 +4,17 @@ pipeline {
   }
 
   stages {
-    stage("Download application files") {
+    stage("Install dependencies") {
       steps {
-        echo "Downloading files"
+        npm i
       }
     }
 
-    stage("Validate source code") {
+    stage("Start application") {
       steps {
-        echo "Validating source code"
+        pm2 start app.js
       }
     }
-
-      stage("Build application") {
-        steps {
-          echo "Build application"
-        }
-      }
     
   }
 }
