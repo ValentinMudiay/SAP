@@ -14,12 +14,13 @@ pipeline {
       steps {
         echo "Validating source code"
       }
+    }
 
       stage("Build application") {
         steps {
           echo "Build application"
         }
       }
-    }
+    
   }
 }
