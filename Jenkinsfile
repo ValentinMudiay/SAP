@@ -4,6 +4,12 @@ pipeline {
   }
 
   stages {
+    stage("Stop process") {
+      steps {
+        sh "pm2 stop 0"
+      }
+    }
+
     stage("Install dependencies") {
       steps {
         sh "npm i"
