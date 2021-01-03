@@ -4,12 +4,15 @@ pipeline {
   }
 
   stages {
-
+    stage("Stop process") {
+      steps {
+        sh "pm2 stop 0"
+      }
+    }
 
     stage("Install dependencies") {
       steps {
-        sh "cd /home/sap/workspace/saveaplaylist.com_main"
-        sh "npm i"
+        sh "cd /home/sap/workspace/saveaplaylist.com_main && npm i"
       }
     }
 
