@@ -18,7 +18,7 @@ pipeline {
 
     stage("Start application") {
       steps {
-       sh "pm2 start /home/sap/workspace/saveaplaylist.com_main --watch"
+       sh "pm2 start /home/sap/workspace/saveaplaylist.com_main/app.js --watch"
       }
     }
     
