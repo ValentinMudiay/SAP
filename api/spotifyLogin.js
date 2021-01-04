@@ -1,5 +1,5 @@
 const router              = require("express").Router(),
-      spotifyService      = require("../services/spotify"),
+      spotifyService      = require("../services/spotifyLogin"),
       log                 = require("../services/log"),
       config              = require("../config/app"),
       successRedirectTo   = config.redirect.onLoginSuccess,
