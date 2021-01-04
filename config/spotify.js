@@ -1,4 +1,3 @@
-const config = require("./app");
 module.exports = {
     client_id        : process.env.CLIENT_ID,
 
@@ -9,10 +8,11 @@ module.exports = {
     auth: { 
         base         :"https://accounts.spotify.com/authorize",
         stateKey     : "auth_state",
+        redirectPath : "/login/callback",
         options      :      {
             client_id      : process.env.CLIENT_ID,
             response_type  : "code",
-            redirect_uri   : `${config.origin}/login/callback`,
+            redirect_uri   : "",
             state          : "",
             scope          : "user-read-email user-read-private",
             show_dialog    : false

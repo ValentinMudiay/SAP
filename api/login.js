@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
     }
         
     log.debug("GET /login -> No session token found, going to authenticate via Spotify.");
-    const { url, state } = spotifyService.getAuthUrlWithState();
+    const { url, state } = spotifyService.getAuthUrlWithState(req.headers.host);
 
     log.debug("GET /login  ->", `Set session {state: ${state}}`);
     req.session.state = state;

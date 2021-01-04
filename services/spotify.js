@@ -1,3 +1,4 @@
+const appConfig     = require("../config/app");
 const spotifyConfig = require("../config/spotify");
 const spotifyDao    = require("../dao/spotify");
 const { v4: uuid } = require("uuid");
@@ -7,12 +8,16 @@ const SpotifyService = {
 
     getUuidKey: () => spotifyConfig.uuidKey,
 
-    getAuthUrlWithState: () => {
-        const state = SpotifyService._getRandomString(32);
+    getAuthUrlWithState: (host) => {
+        const state     = SpotifyService._getRandomString(32),
+              protocol  = appConfig.protocol,
+              path      = spotifyConfig.auth.redirectPath;
+
         let options = spotifyConfig.auth.options,
             url     = spotifyConfig.auth.base + "?";
             
         options.state = state;
+        options.redirect_uri = `${protocol}${host}${path}`;
 
         url += SpotifyService._jsonToQueryStr(options);
 
