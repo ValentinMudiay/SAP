@@ -1,6 +1,7 @@
-const appConfig     = require("../config/app");
-const spotifyConfig = require("../config/spotify");
-const spotifyDao    = require("../dao/spotify");
+const appConfig     = require("../config/app"),
+      spotifyConfig = require("../config/spotify"),
+      spotifyDao    = require("../dao/spotify"),
+      { jsonToQueryStr } = require("../services/queryString");
 
 const SpotifyService = {
     getStateKey: () => spotifyConfig.auth.stateKey,
@@ -29,26 +30,9 @@ const SpotifyService = {
         options.state = state;
         options.redirect_uri = `${protocol}${host}${path}`;
 
-        url += SpotifyService._jsonToQueryStr(options);
+        url += jsonToQueryStr(options);
 
         return { url, state };
-    },
-
-    /**
-     * Converts a one dimensional Javascript object to query string format.
-     * 
-     * @param {object} json Object to be converted.
-     * @returns {string} a query string that can be appended to a URL.
-     */
-    _jsonToQueryStr: (json) => {
-        let str = "";
-
-        Object.keys(json).forEach((key, i, arr) => {
-            str += `${key}=${json[key]}`;
-            str += i !== arr.length-1 ? "&" : "";
-        });
-
-        return str;
     },
 
     /**
@@ -70,7 +54,7 @@ const SpotifyService = {
                     "redirect_uri"  : spotifyConfig.auth.options.redirect_uri,
                     "grant_type"    : "authorization_code"
                 },
-              dataStr        = SpotifyService._jsonToQueryStr(data);
+              dataStr        = jsonToQueryStr(data);
 
         return {
             "method": "post",

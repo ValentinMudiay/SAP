@@ -37,7 +37,7 @@ const SpotifyDao = {
         return axios(options)
 
             .then(response => {
-                log.debug(">>>>>>>>>>>>>>>>>>", response);
+                // TODO: Destructure and return the response data
                 return response;
             })
 

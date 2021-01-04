@@ -22,6 +22,28 @@ module.exports = {
         }
     },
 
+    // Configuration relating to using the Spotify search api
+    search: {
+        base:       "https://api.spotify.com/v1/search",
+        params:     {
+            q:      "",
+            type:   "playlist",
+            market: "US",
+            limit:  3,
+            offset: 0
+        },
+        options:    {
+            "method"  : "get",
+            "url"     : "",
+            "headers" : { 
+                "Authorization": "",
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            "json"    : true
+        }
+    },
+
     // Configuration relating specifically to access and refresh tokens
     token: {
         url: 'https://accounts.spotify.com/api/token',
