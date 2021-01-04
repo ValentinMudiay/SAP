@@ -14,6 +14,12 @@ module.exports = ({
 
     // Protocol used by this application i.e. "http://" or "https://"
     protocol:       process.env.PROTOCOL,
+
+    // Common redirects used in this application
+    redirect: {
+        onError:        "/error",
+        onLoginSuccess: "/success",
+    },
     
     // Initializes session config at runtime
     init: function() {

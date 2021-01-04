@@ -1,13 +1,14 @@
-const router         = require("express").Router(),
-      spotifyService = require("../services/spotify"),
-      log            = require("../services/log"),
-      successRoute   = "/success",
-      errorRoute     = "/error";
+const router              = require("express").Router(),
+      spotifyService      = require("../services/spotify"),
+      log                 = require("../services/log"),
+      config              = require("../config/app"),
+      successRedirectTo   = config.redirect.onLoginSuccess,
+      errorRedirectTo     = config.redirect.onError;
 
 router.get("/", (req, res) => {
     if(req.session.access_token) {
-        log.debug(`GET /login -> Existing token found. Redirecting to ${successRoute}`);
-        res.redirect(successRoute);
+        log.debug(`GET /login -> Existing token found. Redirecting to ${successRedirectTo}`);
+        res.redirect(successRedirectTo);
         return;
     }
         
@@ -33,11 +34,11 @@ router.get("/callback", (req, res) => {
     });
 
     if(sessionState !== requestState) {
-        log.debug(`GET /callback -> State mismatch: redirecting to ${errorRoute}`);
+        log.debug(`GET /callback -> State mismatch: redirecting to ${errorRedirectTo}`);
         delete req.session.state;
 
-        log.debug(`GET /callback -> Refirecting to ${errorRoute}`);
-        res.redirect(errorRoute);
+        log.debug(`GET /callback -> Refirecting to ${errorRedirectTo}`);
+        res.redirect(errorRedirectTo);
         return;
     }
 
@@ -47,13 +48,13 @@ router.get("/callback", (req, res) => {
         req.session.access_token    = tokens.access_token;
         req.session.refresh_token   = tokens.refresh_token;
 
-        log.debug(`GET /login -> Redirecting to ${successRoute}`);
-        res.redirect(successRoute);
+        log.debug(`GET /login -> Redirecting to ${successRedirectTo}`);
+        res.redirect(successRedirectTo);
     })
     .catch(error => {
         log.debug("GET /callback -> Error in promise chain getting token from Spotify\n", error);
-        log.debug(`GET /callback -> Refirecting to ${errorRoute}`);
-        res.redirect(errorRoute);
+        log.debug(`GET /callback -> Refirecting to ${errorRedirectTo}`);
+        res.redirect(errorRedirectTo);
     });
 });
 

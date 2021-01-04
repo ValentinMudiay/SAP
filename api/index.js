@@ -10,8 +10,8 @@ router.get("/", (req, res) => {
     else req.session.count = 1;
 
     log.debug("GET /  ->", `res.sendFile ${file}`);
-    // res.sendFile(file);
-    res.json(req.session);
+    res.sendFile(file);
+    // res.json(req.session); // Used for debugging
 });
 
 router.get("/error", (req, res) => {
