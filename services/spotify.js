@@ -1,12 +1,9 @@
 const appConfig     = require("../config/app");
 const spotifyConfig = require("../config/spotify");
 const spotifyDao    = require("../dao/spotify");
-const { v4: uuid } = require("uuid");
 
 const SpotifyService = {
     getStateKey: () => spotifyConfig.auth.stateKey,
-
-    getUuidKey: () => spotifyConfig.uuidKey,
 
     /**
      * Generates a URL that can be used to obtain an authorization
@@ -138,10 +135,6 @@ const SpotifyService = {
             str += chars.charAt(Math.floor(Math.random() * chars.length));
         }
         return str;
-    },
-
-    getUuid: () => {
-        return uuid();
     },
 };
 
