@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { response } = require("express");
 const log   = require("../services/log");
 
 const SpotifyDao = {
@@ -14,7 +15,7 @@ const SpotifyDao = {
 
         return axios(options)
 
-            .then((response) => {
+            .then(response => {
                 log.debug("Token retrieved successfully.");
 
                 return {
@@ -28,6 +29,23 @@ const SpotifyDao = {
                                                 error.response.statusText);
                 throw new Error("Could not get token from Spotify API.");
             });
+    },
+
+    search: options => {
+        log.debug("SpotifyDao.search()", options);
+
+        return axios(options)
+
+            .then(response => {
+                log.debug(">>>>>>>>>>>>>>>>>>", response);
+                return response;
+            })
+
+            .catch(error => {
+                log.debug(`Error: Status code ${error.response.status}`, 
+                                                error.response.statusText);
+                throw new Error("Could not get search results from Spotify API.");
+            })
     },
 
     getProfile: options => {
