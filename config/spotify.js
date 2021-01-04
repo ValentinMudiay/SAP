@@ -1,10 +1,13 @@
 module.exports = {
+    // Client ID provided by Spotify for this application
     client_id        : process.env.CLIENT_ID,
 
+    // Secret provided by Spotify for this applicatiton
     client_secret    : process.env.CLIENT_SECRET,
 
     uuidKey          : "sap_uuid",
 
+    // Configuration used during initial Spotify authenticatiton
     auth: { 
         base         :"https://accounts.spotify.com/authorize",
         stateKey     : "auth_state",
@@ -19,6 +22,7 @@ module.exports = {
         }
     },
 
+    // Configuration relating specifically to access and refresh tokens
     token: {
         url: 'https://accounts.spotify.com/api/token',
     },

@@ -2,6 +2,13 @@ const axios = require("axios");
 const log   = require("../services/log");
 
 const SpotifyDao = {
+    /**
+     * Makes http request based on options provided. The response is expected
+     * to contain a data object with access_token and refresh_token properties.
+     * 
+     * @param {object} options used in the axios http request.
+     * @returns {Promise} containing access and refresh tokens in an object.
+     */
     getToken: options => {
         log.debug("SpotifyDao.getToken()", options);
 

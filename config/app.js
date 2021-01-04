@@ -6,10 +6,16 @@ const { Pool }  = require("pg"),
 
 
 module.exports = ({
+    // Enable verbose logging
     debug:          process.env.DEBUG,
+
+    // Port this application should listen to and serve requests on
     port:           process.env.PORT || 3000,
+
+    // Protocol used by this application i.e. "http://" or "https://"
     protocol:       process.env.PROTOCOL,
     
+    // Initializes session config at runtime
     init: function() {
         const sessionConfig = {
             store:             new pgSession({pool}),
