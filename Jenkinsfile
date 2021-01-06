@@ -4,9 +4,9 @@ pipeline {
   }
 
   stages {
-    stage("Initial test env") {
+    stage("Stop application") {
       steps {
-        echo "First stage"
+        echo "pm2 stop 1"
       }
     }
 
