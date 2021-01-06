@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const helmet    = require("helmet"),
       config    = require("./config/app"),
-      isAuth    = require("./api/authChecker"),
+      isAuth    = require("./api/authChecker"), // To be used for routes that require authentication
       authApi   = require("./api/spotifyLogin"),
       rootApi   = require("./api/index"),
       searchApi = require("./api/spotifySearch"),
@@ -11,7 +11,7 @@ const helmet    = require("helmet"),
 
 app.use(config.session);
 app.use(helmet());
-app.use(rootApi);
+app.use("/", rootApi);
 app.use("/login", authApi);
 app.use("/search", searchApi);
 

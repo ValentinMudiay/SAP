@@ -6,7 +6,7 @@ const log   = require("../services/log");
 router.get("/", (req, res) => {
     const file = path.join(__dirname, "../public", "index.html");
 
-    if(req.session.count) req.session.count++
+    if(req.session.count) req.session.count++;
     else req.session.count = 1;
 
     log.debug("GET /  ->", `res.sendFile ${file}`);

@@ -3,11 +3,19 @@ const router             = require("express").Router(),
       spotifyDao         = require("../dao/spotify"),
       log                = require("../services/log");
 
+/**
+ * Route used for searching Spotify via the Spotify search api.
+ * We are expecting the search query as a URL query parameter named "q".
+ * i.e. /search?q=SomeQuery
+ * 
+ * For additional information on the Spotify search api, see:
+ * 
+ * https://developer.spotify.com/documentation/web-api/reference/search/search/
+ */
 router.get("/", (req, res) => {
-    const encodedQuery = encodeURIComponent(req.query.q);
-    log.debug("GET /search ->", "encodedQuery = " + encodedQuery);
+    log.debug("GET /search ->", "query = " + req.query.q);
     
-    let url = spotifyService.getSearchUrl(encodedQuery);
+    let url = spotifyService.getSearchUrl(req.query.q);
     log.debug("GET /search -> Generated search url = ", url);
     
     token = req.session.access_token;

@@ -14,10 +14,10 @@ const SpotifyService = {
      * Spotify documentation: 
      * https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow
      * 
-     * @param {String} host The value of the host header receieved from
-     *                      the client's http request.
-     * @returns {object} the spotify auth URL and a randomly generated
-     *                   string to represent the state.
+     * @param {String} host The value of the host header receieved from the
+     *                      client's http request.
+     * @returns object containing the spotify auth URL and a randomly generated
+     *          string to represent the state.
      */
     getAuthUrlWithState: (host) => {
         const state     = SpotifyService._getRandomString(32),
@@ -43,7 +43,7 @@ const SpotifyService = {
      * https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow
      * 
      * @param {string} code Authorizatiton code received from Spotify.
-     * @returns {object} containing POST request options.
+     * @returns object containing POST request options.
      */
     _getTokenOptions: code => {
         const authStr        = spotifyConfig.client_id + ":" + spotifyConfig.client_secret,
@@ -72,8 +72,8 @@ const SpotifyService = {
      * Attempts to retrieve access and refresh tokens from Spotify.
      * 
      * @param {string} code Authorization code received from Spotify.
-     * @returns {Promise} to complete an http request in an attempt to
-     *                    retrieve access and refresh tokens from Spotify.
+     * @returns Promise to complete an http request in an attempt to
+     *          retrieve access and refresh tokens from Spotify.
      */
     getTokens: code => {
         const options = SpotifyService._getTokenOptions(code);
@@ -109,7 +109,7 @@ const SpotifyService = {
      * Generates a string of random alpha-numeric characters.
      * 
      * @param {number} length The number of characters desired in the returned value.
-     * @returns {string} of random alpha-numeric characters
+     * @returns string of random alpha-numeric characters
      */
     _getRandomString: function(length) {
         var str   = '';

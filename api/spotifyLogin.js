@@ -5,6 +5,14 @@ const router              = require("express").Router(),
       successRedirectTo   = config.redirect.onLoginSuccess,
       errorRedirectTo     = config.redirect.onError;
 
+/**
+ * Entry point for the /login route initiates the Authorization Code
+ * flow by requesting an Authorization Code as per the specification
+ * outlined at the following links:
+ * 
+ * https://tools.ietf.org/html/rfc6749#section-4.1
+ * https://developer.spotify.com/documentation/general/guides/authorization-guide/
+ */
 router.get("/", (req, res) => {
     if(req.session.access_token) {
         log.debug(`GET /login -> Existing token found. Redirecting to ${successRedirectTo}`);
@@ -22,6 +30,11 @@ router.get("/", (req, res) => {
     res.redirect(url);
 });
 
+/**
+ * This route is used by Spotify after an Authorization Code has been requested.
+ * The Authorization Code will be returned from Spotify in the http request
+ * made to this route and can be exchanged for access and refresh tokens.
+ */
 router.get("/callback", (req, res) => {
     const sessionState      = req.session.state,
           requestState      = req.query.state,
