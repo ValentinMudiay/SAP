@@ -1,0 +1,8 @@
+# Prevents Jenkinsfile on main branch from being overwritten during merges
+#
+# For example:
+# git config --global merge.ours.driver true
+# git checkout main
+# echo "path/file_to_ignore merge=ours" >> .gitattributes
+# git merge test
+Jenkinsfile merge=ours
