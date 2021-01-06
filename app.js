@@ -19,10 +19,10 @@ const path       = require("path"),
 app.use(config.session);
 app.use(helmet());
 
-// app.use('/static', express.static(path.join(__dirname, 'public')));
 
 app.use("/", underConstruction, rootApi);
 app.use("/login", underConstruction, authApi);
 app.use("/search", underConstruction, isLoggedIn.viaSpotify, searchApi);
 
+app.use('/static', express.static(path.join(__dirname, 'public')));
 app.listen(config.port, () => console.log(`Listening on port ${config.port}`));
