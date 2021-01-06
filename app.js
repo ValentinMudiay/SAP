@@ -1,18 +1,28 @@
 require("dotenv").config();
 
-const helmet     = require("helmet"),
-      config     = require("./config/app"),
+// Internal routes
+const rootApi    = require("./api/index"),
       isLoggedIn = require("./api/authChecker"),
       authApi    = require("./api/spotifyLogin"),
-      rootApi    = require("./api/index"),
       searchApi  = require("./api/spotifySearch"),
+      underConstruction = require("./api/underConstruction");
+
+// App Config
+const config     = require("./config/app");
+      
+// NPM Packages
+const path       = require("path"),
+      helmet     = require("helmet"),
       express    = require("express"),
       app        = express();
 
 app.use(config.session);
 app.use(helmet());
-app.use("/", rootApi);
-app.use("/login", authApi);
-app.use("/search", isLoggedIn.viaSpotify, searchApi);
+
+// app.use('/static', express.static(path.join(__dirname, 'public')));
+
+app.use("/", underConstruction, rootApi);
+app.use("/login", underConstruction, authApi);
+app.use("/search", underConstruction, isLoggedIn.viaSpotify, searchApi);
 
 app.listen(config.port, () => console.log(`Listening on port ${config.port}`));
