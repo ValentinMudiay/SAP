@@ -4,19 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Save A Playlist</title>
+    <link rel="stylesheet" href="https://use.typekit.net/wnc1qek.css">
     <style>
         body {
-            background-color: #216331;
+            background-color: #5bc057;
             color: white;
-            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-family: europa, sans-serif;
+            text-align: center;
+        }
+
+        header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 43px 0 93px 0;
+        }
+
+        h1 {
+            font-size: 6rem;
+            margin: 0;
+        }
+        
+        label {
+            display: none;
+        }
+
+        p {
+            color: black;
+            margin: 0;
+        }
+
+        input[type=email] {
+            border: none;
+            border-radius: 6px 0 0 6px;
+            padding: 14px 0 14px 12px;
+            width: 290px;
+        }
+
+        input[type=submit] {
+            border: none;
+            background-color: black;
+            color: white;
+            padding: 14px 25px 14px 25px;
+            border-radius: 0 6px 6px 0;
+            position: absolute;
+        }
+
+        input::placeholder {
+            color: #B7B7B7;
+        }
+
+        form {
+            margin: 88px 0;
+            position: relative;
+            right: 46px;
+        }
+
+        .input, .notify-btn {
+            display: inline;
+        }
+
+        header span {
+            position: relative;
+            bottom: 15px;
+        }
+
+        @media only screen and (max-width: 762px) {
+            /* TODO: Update for smaller screens */
         }
     </style>
 </head>
 <body>
     <div id="app">
-        <img src="/static/resources/panda.gif" width="480" height="480" alt="Waiting panda">
-        <h3>Well... We aren't ready yet.</h3>
-        <p>The initial release of this site is a work in progress.</p>
+        <header>
+            <img class="playlist-icon" src="/static/resources/playlist-add.svg" alt="Add a playlist icon">
+            <span>SAVE A PLAYLIST</span>
+        </header>
+        <div class="content">
+            <img src="/static/resources/panda.gif" width="260" height="260" alt="Waiting panda">
+            <h1>COMING SOON</h1>
+            <p>We'll be launching soon, subscribe to be notified when we do.</p>
+    
+            <form action="/notify-launch" method="post">
+                <div class="input">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="Email Address" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" autofocus required>
+                </div>
+                <div class="notify-btn">
+                    <input type="submit" value="Notify Me">
+                </div>
+            </form>
+        </div>
     </div>
     
 </body>
