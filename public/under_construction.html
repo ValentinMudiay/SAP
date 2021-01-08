@@ -15,13 +15,27 @@
         }
 
         header {
-            font-size: 1.5rem;
+            font-size: 1rem;
             font-weight: 700;
-            margin: 43px 0 93px 0;
+            margin: 43px 0 48px 0;
+        }
+
+        header span {
+            position: relative;
+            bottom: 15px;
+        }
+
+        .playlist-icon {
+            width: 35px;
+        }
+
+        img.panda {
+            width: 220px;
+            height: 220px;
         }
 
         h1 {
-            font-size: 6rem;
+            font-size: 4rem;
             margin: 0;
         }
         
@@ -55,8 +69,8 @@
         }
 
         form {
-            margin: 88px 0;
             position: relative;
+            top: 88px;
             right: 46px;
         }
 
@@ -64,13 +78,52 @@
             display: inline;
         }
 
-        header span {
-            position: relative;
-            bottom: 15px;
+        @media only screen and (min-width: 768px) {
+
+            header {
+                font-size: 1.5rem;
+                font-weight: 700;
+                margin: 43px 0 32px 0;
+            }
+
+            .playlist-icon {
+                width: 41px;
+            }
+
+            img.panda {
+                width: 220px;
+                height: 220px;
+            }
+
+            h1 {
+                font-size: 5rem;
+            }
+
+            form {
+                top: 66px;
+            }
         }
 
-        @media only screen and (max-width: 762px) {
-            /* TODO: Update for smaller screens */
+        @media only screen and (min-width: 1200px) {
+
+            header {
+                font-size: 1.5rem;
+                font-weight: 700;
+                margin: 43px 0 93px 0;
+            }
+
+            img.panda {
+                width: 260px;
+                height: 260px;
+            }
+
+            h1 {
+                font-size: 6rem;
+            }
+
+            form {
+                top: 88px;
+            }
         }
     </style>
 </head>
@@ -81,7 +134,7 @@
             <span>SAVE A PLAYLIST</span>
         </header>
         <div class="content">
-            <img src="/static/resources/panda.gif" width="260" height="260" alt="Waiting panda">
+            <img class="panda" src="/static/resources/panda.gif" alt="Waiting panda">
             <h1>COMING SOON</h1>
             <p>We'll be launching soon, subscribe to be notified when we do.</p>
     
