@@ -1,2 +1,3 @@
 Parameterize Authorization Code options - i.e. scope
 Handle dynamic route after successful login
+Validate token prior to executing search
