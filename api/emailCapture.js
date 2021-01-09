@@ -18,6 +18,8 @@ router.post("/", (req, res) => {
         const query = "INSERT INTO email(email) VALUES($1)";
 
         client.query(query, [email], (err, res) => {
+            done();
+            
             if(err) log.debug(err);
             else log.debug(`Entered ${email} into db`); // TODO: Check res.rowCount === 1 from db
         });
