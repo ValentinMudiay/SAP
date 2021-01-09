@@ -5,8 +5,11 @@ const router             = require("express").Router(),
 
 /**
  * Route used for searching Spotify via the Spotify search api.
- * We are expecting the search query as a URL query parameter named "q".
- * i.e. /search?q=SomeQuery
+ * We are expecting the following URL query parameters:
+ *      q: the search query
+ *      typeahead: true if typeahead results are desired
+ * 
+ * i.e. /search?q=SomeQuery&typeahead=true
  * 
  * For additional information on the Spotify search api, see:
  * 

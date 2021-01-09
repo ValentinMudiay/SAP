@@ -31,6 +31,16 @@ const SpotifyDao = {
             });
     },
 
+    /**
+     * Makes http request based on options provided. The response is expected
+     * to contain a data object with search results
+     *
+     * For additional information on the Spotify search api, see:
+     * https://developer.spotify.com/documentation/web-api/reference/search/search/
+     *  
+     * @param {object} options 
+     * @returns Promise containing search results in the response
+     */
     search: options => {
         log.debug("SpotifyDao.search()", options);
 

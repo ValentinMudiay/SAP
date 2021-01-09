@@ -1,5 +1,11 @@
 const searchInput = document.getElementById("search");
 
+/**
+ * Executes AJAX api call to fetch search results.
+ * 
+ * @param {string} query passed to Spotify for searching.
+ * @returns Promise containing search results in the response.
+ */
 function search(query) {
    return fetch(`/search?q=${query}&typeahead=true`)
     .then(res => res.json())
