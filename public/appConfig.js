@@ -1,4 +1,4 @@
-const config = (function() {
+(function() {
     fetch("/getConfig")
     .then(res => res.json())
     .then(data => window.config = data)

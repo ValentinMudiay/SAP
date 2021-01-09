@@ -1,16 +1,10 @@
 const searchInput = document.getElementById("search");
 
-let searchStr = "";
-
 function search(query) {
    return fetch(`/search?q=${query}&typeahead=true`)
     .then(res => res.json())
-    .then(data => {
-        console.log(data);
-    })
-    .catch(err => {
-        console.error(err);
-    });
+    .then(data => data)
+    .catch(err => console.error(err));
 }
 
 searchInput.addEventListener("keyup", (event) => {
@@ -21,10 +15,9 @@ searchInput.addEventListener("keyup", (event) => {
     const { minimumCharsForTypeahead } = window.config;
 
     if(searchStrNoWhiteSpace.length >= minimumCharsForTypeahead) {
-        console.log(searchStrNoWhiteSpace.length, "Good");
-        search(input);
-    }
-    else {
-        console.log(searchStrNoWhiteSpace.length, "Bad");
+        search(input)
+        .then(response => {
+            console.log(response); // TODO: Handle repsonse with search results
+        });
     }
 });
