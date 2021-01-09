@@ -13,9 +13,13 @@ const router             = require("express").Router(),
  * https://developer.spotify.com/documentation/web-api/reference/search/search/
  */
 router.get("/", (req, res) => {
+    
     log.debug("GET /search ->", "query = " + req.query.q);
     
-    let url = spotifyService.getSearchUrl(req.query.q);
+    const query = req.query.q,
+          isTypeahead = req.query.typeahead === "true",
+          url = spotifyService.getSearchUrl(query, isTypeahead);
+
     log.debug("GET /search -> Generated search url = ", url);
     
     token = req.session.access_token;
@@ -29,6 +33,7 @@ router.get("/", (req, res) => {
         log.debug(error)
         log.debug("Unable to get search.");
     });
+    
 
 });
 

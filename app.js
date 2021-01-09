@@ -6,6 +6,7 @@ const rootApi    = require("./api/index"),
       authApi    = require("./api/spotifyLogin"),
       searchApi  = require("./api/spotifySearch"),
       emailApi   = require("./api/emailCapture"),
+      frontendConfigApi = require("./api/config"),
       underConstruction = require("./api/underConstruction");
 
 // App Config
@@ -24,6 +25,7 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/", underConstruction, rootApi);
+app.use("/getConfig", frontendConfigApi);
 app.use("/login", underConstruction, authApi);
 app.use("/search", underConstruction, isLoggedIn.viaSpotify, searchApi);
 app.use("/notify-launch", emailApi);

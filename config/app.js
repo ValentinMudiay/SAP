@@ -41,4 +41,11 @@ module.exports = ({
         this.session = session(sessionConfig);
         return this;
     },
+
+    search: {
+        // Number of results to return in the playlist search typeahead
+        typeAheadReturnCount: 7,
+        // Number of characters required before typeahead search is executed
+        minimumCharsForTypeahead: 3
+    },
 }).init();

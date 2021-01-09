@@ -1,4 +1,5 @@
 const { jsonToQueryStr } = require("../services/queryString"),
+      config             = require("../config/app"),
       spotify            = require("../config/spotify");
 
 module.exports = {
@@ -7,13 +8,18 @@ module.exports = {
      * parameter be URI encoded.
      * 
      * @param {string} query URI encoded query
+     * @param {boolean} isTypeahead Set to true to results for typeahead search
      * @returns string url of the Spotify search endpoint with parameters
      */
-    getSearchUrl: query => {
+    getSearchUrl: (query, isTypeahead) => {
         const encodedQuery = encodeURIComponent(query);
 
         let urlParams = spotify.search.params;
         urlParams.q = encodedQuery;
+
+        if(isTypeahead) {
+            urlParams.limit = config.search.typeAheadReturnCount
+        }
 
         let url = spotify.search.base + "?";
         url += jsonToQueryStr(urlParams);

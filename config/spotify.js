@@ -1,3 +1,4 @@
+const config = require("./app");
 module.exports = {
     // Client ID provided by Spotify for this application
     client_id        : process.env.CLIENT_ID,
@@ -29,7 +30,7 @@ module.exports = {
             q:      "",
             type:   "playlist",
             market: "US",
-            limit:  3,
+            limit:  10,
             offset: 0
         },
         options:    {
