@@ -25,7 +25,13 @@ router.get("/", (req, res) => {
 
     log.debug("GET /search -> Generated search url = ", url);
     
-    token = req.session.access_token;
+    let token = req.session.access_token;
+
+    if(!token) {
+        // Check db for client token
+        // if token in db, token=dbtoken
+        // else get new token using clientId and clientSecret
+    }
     const options = spotifyService.getSearchOptions(url, token);
 
     spotifyDao.search(options)

@@ -5,7 +5,9 @@ const log   = require("../services/log");
 const SpotifyDao = {
     /**
      * Makes http request based on options provided. The response is expected
-     * to contain a data object with access_token and refresh_token properties.
+     * to contain a data object with access_token and refresh_token properties
+     * if the Authorization Code flow was executed. If the Client Credentials
+     * flow was executed, refresh_token is undefined.
      * 
      * @param {object} options used in the axios http request.
      * @returns {Promise} containing access and refresh tokens in an object.

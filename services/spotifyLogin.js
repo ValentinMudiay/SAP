@@ -37,23 +37,34 @@ const SpotifyService = {
 
     /**
      * Builds a Javascript object containing the parameters of a POST request
-     * used to obtain access and refresh tokens from Spotify. 
+     * used to obtain access and refresh tokens from Spotify. If the code
+     * parameter is falsy, no refresh token will be provided since the Client
+     * Credentials flow is executed.
      * 
      * For more info on these parameters vist:
      * https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow
      * 
      * @param {string} code Authorizatiton code received from Spotify.
+     *                      If undefined or falsey, Client Credentials
+     *                      flow options are provided.
      * @returns object containing POST request options.
      */
     _getTokenOptions: code => {
+        let data = {
+            grant_type: "client_credentials"
+        };
+
+        if(code) {
+            data =  {
+                "code"          : code,
+                "redirect_uri"  : spotifyConfig.auth.options.redirect_uri,
+                "grant_type"    : "authorization_code"
+            }
+        }
+        
         const authStr        = spotifyConfig.client_id + ":" + spotifyConfig.client_secret,
               buffer         = new Buffer.from(authStr),
               encodedAuthStr = buffer.toString("base64"),
-              data           = {
-                    "code"          : code,
-                    "redirect_uri"  : spotifyConfig.auth.options.redirect_uri,
-                    "grant_type"    : "authorization_code"
-                },
               dataStr        = jsonToQueryStr(data);
 
         return {
@@ -69,9 +80,12 @@ const SpotifyService = {
     },
 
     /**
-     * Attempts to retrieve access and refresh tokens from Spotify.
+     * Attempts to retrieve access and refresh tokens from Spotify
+     * using the Authorization Code flow or Client Credentials flow.
      * 
      * @param {string} code Authorization code received from Spotify.
+     *                      If undefined or falsey, Client Credentials
+     *                      flow is executed.
      * @returns Promise to complete an http request in an attempt to
      *          retrieve access and refresh tokens from Spotify.
      */
