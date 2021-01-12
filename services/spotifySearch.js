@@ -31,7 +31,7 @@ module.exports = {
      * 
      * @param {string} url URI encoded string containing the URL and query 
      *                     parameters.
-     * @param {*} token Spotify access token
+     * @param {string} token Spotify access token
      * @returns object containing the options required to make a GET request
      *          to Spotify's search api
      */
