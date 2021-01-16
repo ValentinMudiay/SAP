@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/", underConstruction, rootApi);
 app.use("/getConfig", frontendConfigApi);
 app.use("/login", underConstruction, authApi);
-app.use("/search", underConstruction, isLoggedIn.viaSpotify, searchApi);
+app.use("/search", underConstruction, searchApi); // isLoggedIn.viaSpotify,
 app.use("/notify-launch", emailApi);
 
 app.use('/static', express.static(path.join(__dirname, 'public')));

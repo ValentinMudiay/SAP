@@ -50,6 +50,8 @@ module.exports = {
         url: 'https://accounts.spotify.com/api/token',
     },
 
+    clientCredentialsToken: "",
+
     profile: {
         url: 'https://api.spotify.com/v1/me',
     }

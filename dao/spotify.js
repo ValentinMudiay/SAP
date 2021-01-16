@@ -1,5 +1,7 @@
 const axios = require("axios");
-const { response } = require("express");
+const dbConfig = require("../config/db");
+const Pool = require("pg").Pool;
+const pool = new Pool(dbConfig);
 const log   = require("../services/log");
 
 const SpotifyDao = {
@@ -60,6 +62,24 @@ const SpotifyDao = {
             })
     },
 
+    getDbClientCredentialToken: () => {
+        log.debug("SpotifyDao.getDbClientCredentialToken() is running");
+
+        const q = "SELECT token FROM client WHERE last_modified = (SELECT MAX(last_modified) FROM client)"
+        return query(q).then(response => response.rows[0].token)
+        .catch(error => {
+            log.debug(error);
+        });
+    },
+
+
+    updateDbClientCredentialToken: token => {
+        log.debug("SpotifyDao.updateDbClientCredentialToken() is running");
+
+        const q = "UPDATE client SET token = $1 WHERE last_modified = (SELECT MAX(last_modified) FROM client);";
+        return query(q, [token]);
+    },
+
     getProfile: options => {
         log.debug("SpotifyDao.getProfile()", options);
 
@@ -75,6 +95,17 @@ const SpotifyDao = {
                 throw new Error("Could not get profile information.");
             });
     },
+
+    
+};
+
+const query = (query, params) => {
+    return new Promise((resolve, reject) => {
+        pool.query(query, params, (err, res) => {
+            if(err) reject(err);
+            else resolve(res);
+        });
+    });
 };
 
 module.exports = SpotifyDao;
