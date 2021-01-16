@@ -62,17 +62,27 @@ const SpotifyDao = {
             })
     },
 
+    /**
+     * Get the latest client credentials token from the db.
+     * 
+     * @returns A Promise containing the client credentials token
+     */
     getDbClientCredentialToken: () => {
         log.debug("SpotifyDao.getDbClientCredentialToken() is running");
 
         const q = "SELECT token FROM client WHERE last_modified = (SELECT MAX(last_modified) FROM client)"
-        return query(q).then(response => response.rows[0].token)
+        return query(q)
+        .then(response => response.rows[0].token)
         .catch(error => {
             log.debug(error);
         });
     },
 
-
+    /**
+     * Set a new client credentials token in the db, discarding the old.
+     * 
+     * @param {string} token A new client credentials token from Spotify.
+     */
     updateDbClientCredentialToken: token => {
         log.debug("SpotifyDao.updateDbClientCredentialToken() is running");
 

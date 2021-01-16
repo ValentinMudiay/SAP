@@ -32,6 +32,12 @@ router.get("/", (req, res) => {
     let token = req.session.access_token;
 
     if(!token && isTypeahead) {
+        /**
+         * We should look for a valid token in the following order:
+         *      1. Cache
+         *      2. Database
+         *      3. Spotify
+         */
         spotifyDao.getDbClientCredentialToken()
         .then(token => {
             if(token){
