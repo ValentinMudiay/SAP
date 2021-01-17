@@ -1,9 +1,6 @@
 const router             = require("express").Router(),
       spotifyService     = require("../services/spotifySearch"),
-      spotifyDao         = require("../dao/spotify"),
       log                = require("../services/log");
-
-let { clientCredentialsToken } = require("../config/spotify");
 
 /**
  * Route used for searching Spotify via the Spotify search api.
@@ -17,49 +14,34 @@ let { clientCredentialsToken } = require("../config/spotify");
  * 
  * https://developer.spotify.com/documentation/web-api/reference/search/search/
  */
-router.get("/", (req, res) => {
-
-    // console.log(req, ">>>>>>>>>>"); // can delete if not needed for debugging
-    
+router.get("/", (req, res) => { 
     log.debug("GET /search ->", "query = " + req.query.q);
     
     const query = req.query.q,
-          isTypeahead = req.query.typeahead === "true",
-          url = spotifyService.getSearchUrl(query, isTypeahead);
-
-    log.debug("GET /search -> Generated search url = ", url);
+          isTypeahead = req.query.typeahead === "true";
     
     let token = req.session.access_token;
 
-    if(!token && isTypeahead) {
-        /**
-         * We should look for a valid token in the following order:
-         *      1. Cache
-         *      2. Database
-         *      3. Spotify
-         */
-        spotifyDao.getDbClientCredentialToken()
-        .then(token => {
-            if(token){
-                clientCredentialsToken = token;
-                log.debug(clientCredentialsToken);
-            }
-        });
-        
-        // Check db for client token
-        // if token in db, token=dbtoken
-        // else get new token using clientId and clientSecret
-    }
-    const options = spotifyService.getSearchOptions(url, token);
+    // spotifyService.setClientCredentialsToken(); // used for debugging this method
 
-    spotifyDao.search(options)
-    .then(response => {
-        res.json(response.data); // TODO: update to return appropriate response
+    spotifyService.search(query, isTypeahead, token)
+    .then(result => {
+        log.debug("SEARCH RESULTS >>>>>>>>>>>>>>>>\n" + result);
     })
     .catch(error => {
-        log.debug(error)
-        log.debug("Unable to get search.");
+        console.log(error);
     });
+    
+
+
+    // spotifyDao.search(options)
+    // .then(response => {
+    //     res.json(response.data); // TODO: update to return appropriate response
+    // })
+    // .catch(error => {
+    //     log.debug(error)
+    //     log.debug("Unable to get search.");
+    // });
     
 
 });

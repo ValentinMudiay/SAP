@@ -1,7 +1,5 @@
 const axios = require("axios");
-const dbConfig = require("../config/db");
-const Pool = require("pg").Pool;
-const pool = new Pool(dbConfig);
+const { response } = require("express");
 const log   = require("../services/log");
 
 const SpotifyDao = {
@@ -12,7 +10,7 @@ const SpotifyDao = {
      * flow was executed, refresh_token is undefined.
      * 
      * @param {object} options used in the axios http request.
-     * @returns {Promise} containing access and refresh tokens in an object.
+     * @returns Promise containing access and refresh tokens in an object.
      */
     getToken: options => {
         log.debug("SpotifyDao.getToken()", options);
@@ -36,6 +34,30 @@ const SpotifyDao = {
     },
 
     /**
+     * Makes an http request based on the options provided.
+     * 
+     * @param {object} options used in axios http request.
+     * @returns Promise containing {token: 'sometokenfromspotify'}
+     */
+    getClientCredentialsToken: options => {
+        log.debug("SpotifyDao.getClientCredentialsToken()", options);
+
+        return axios(options)
+
+        .then(response => {
+            log.debug("Client Credentials token retrieved successfully.");
+
+            return response.data.access_token;
+        })
+
+        .catch(error => {
+            log.debug(`Error: Status code ${error.response.status}`, 
+                                            error.response.statusText);
+            throw new Error("Could not retrieve new client credential token.");
+        });
+    },
+
+    /**
      * Makes http request based on options provided. The response is expected
      * to contain a data object with search results
      *
@@ -56,38 +78,14 @@ const SpotifyDao = {
             })
 
             .catch(error => {
-                log.debug(`Error: Status code ${error.response.status}`, 
-                                                error.response.statusText);
-                throw new Error("Could not get search results from Spotify API.");
-            })
-    },
-
-    /**
-     * Get the latest client credentials token from the db.
-     * 
-     * @returns A Promise containing the client credentials token
-     */
-    getDbClientCredentialToken: () => {
-        log.debug("SpotifyDao.getDbClientCredentialToken() is running");
-
-        const q = "SELECT token FROM client WHERE last_modified = (SELECT MAX(last_modified) FROM client)"
-        return query(q)
-        .then(response => response.rows[0].token)
-        .catch(error => {
-            log.debug(error);
-        });
-    },
-
-    /**
-     * Set a new client credentials token in the db, discarding the old.
-     * 
-     * @param {string} token A new client credentials token from Spotify.
-     */
-    updateDbClientCredentialToken: token => {
-        log.debug("SpotifyDao.updateDbClientCredentialToken() is running");
-
-        const q = "UPDATE client SET token = $1 WHERE last_modified = (SELECT MAX(last_modified) FROM client);";
-        return query(q, [token]);
+                // log.debug(`Error: Status code ${error.response.status}`, 
+                //                                 error.response.statusText);
+                throw {
+                    error: error,
+                    message: `Could not get search results from Spotify API. ${error.response.statusText}`,
+                    status: error.response.status
+                };
+            });
     },
 
     getProfile: options => {
@@ -107,15 +105,6 @@ const SpotifyDao = {
     },
 
     
-};
-
-const query = (query, params) => {
-    return new Promise((resolve, reject) => {
-        pool.query(query, params, (err, res) => {
-            if(err) reject(err);
-            else resolve(res);
-        });
-    });
 };
 
 module.exports = SpotifyDao;
