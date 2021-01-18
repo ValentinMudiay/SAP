@@ -3,9 +3,7 @@ const appConfig     = require("../config/app"),
       spotifyDao    = require("../dao/spotify"),
       { jsonToQueryStr } = require("../services/queryString");
 
-const SpotifyService = {
-    getStateKey: () => spotifyConfig.auth.stateKey,
-
+const SpotifyLoginService = {
     /**
      * Generates a URL that can be used to obtain an authorization
      * code from Spotify. The authorization code received from Spotitfy
@@ -20,7 +18,7 @@ const SpotifyService = {
      *          string to represent the state.
      */
     getAuthUrlWithState: (host) => {
-        const state     = SpotifyService._getRandomString(32),
+        const state     = SpotifyLoginService._getRandomString(32),
               protocol  = appConfig.protocol,
               path      = spotifyConfig.auth.redirectPath;
 
@@ -90,7 +88,7 @@ const SpotifyService = {
      *          retrieve access and refresh tokens from Spotify.
      */
     getTokens: code => {
-        const options = SpotifyService._getTokenOptions(code);
+        const options = SpotifyLoginService._getTokenOptions(code);
         
         return spotifyDao.getToken(options)
             .then((token) => {
@@ -98,25 +96,6 @@ const SpotifyService = {
             })
             .catch(ex => console.error(ex));
         
-    },
-
-    _getProfileOptions: (token) => {
-        const url = spotifyConfig.profile.url;
-
-        return {
-            "method"  : "get",
-            "url"     : url,
-            "headers" : { "Authorization": "Bearer " + token },
-            "json"    : true
-        };
-    },
-
-    getProfile: token => {
-        const options = SpotifyService._getProfileOptions(token);
-
-        return spotifyDao.getProfile(options)
-            .then(profile => profile)
-            .catch(error => console.log(error));
     },
 
     /**
@@ -136,4 +115,4 @@ const SpotifyService = {
     },
 };
 
-module.exports = SpotifyService;
+module.exports = SpotifyLoginService;

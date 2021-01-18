@@ -11,7 +11,6 @@ module.exports = {
     // Configuration used during initial Spotify authenticatiton
     auth: { 
         base         :"https://accounts.spotify.com/authorize",
-        stateKey     : "auth_state",
         redirectPath : "/login/callback",
         options      :      {
             client_id      : process.env.CLIENT_ID,
