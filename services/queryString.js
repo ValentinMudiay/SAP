@@ -15,4 +15,20 @@ module.exports = {
 
         return str;
     },
+
+    /**
+     * Generates a string of random alpha-numeric characters.
+     * 
+     * @param {number} length The number of characters desired in the returned value.
+     * @returns string of random alpha-numeric characters
+     */
+    getRandomString: (length) => {
+        var str   = '';
+        var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+        for (let i = 0; i < length; i++) {
+            str += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return str;
+    }
 }

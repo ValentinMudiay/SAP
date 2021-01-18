@@ -1,6 +1,5 @@
 const spotify            = require("../config/spotify"),
-      spotifyDao         = require("../dao/spotify"),
-      { jsonToQueryStr } = require("../services/queryString");
+      tokenService         = require("./token");
 
 
 module.exports = {
@@ -38,7 +37,7 @@ function refreshClientCredentialsTokenAtIntervals(delay) {
 function setClientCredentialsToken() {
     getNewClientCredentialsToken()
     .then(token => {
-        spotify.token.clientCredentialsToken = token;
+        spotify.token.clientCredentialsToken = token.access_token;
     })
     .catch(error => {
         log.debug(error);
@@ -48,39 +47,12 @@ function setClientCredentialsToken() {
 /**
  * Gets the axios http request options for the Client Credentials api request.
  * 
- * @returns Promise containing the retrieved token in the response
+ * @returns Promise containing the retrieved token object in the response.
+ *          {access_token: "someaccesstoken"}
  */
 function getNewClientCredentialsToken() {
-    const options = getClientCredentialsOptions();
-    return spotifyDao.getClientCredentialsToken(options);
-}
-
-/**
- * Assembles the options object used in the axios http request.
- * 
- * @returns Object containing the properties and values necessary to retrieve
- *          a token using the Client Credentials Flow.
- */
-function getClientCredentialsOptions() {
-    const data = {
-        grant_type: "client_credentials"
-    };
-
-    const authStr        = spotify.client_id + ":" + spotify.client_secret,
-          buffer         = new Buffer.from(authStr),
-          encodedAuthStr = buffer.toString("base64"),
-          dataStr        = jsonToQueryStr(data);
-
-    return {
-        "method": "post",
-        "url"   : spotify.token.url,
-        "data"  : dataStr,
-        "headers": {
-            "Authorization" : "Basic " + encodedAuthStr,
-            "Content-Type"  : "application/x-www-form-urlencoded"
-        },
-        "json": true
-    };
+    const options = tokenService.getTokenOptions();
+    return tokenService.getToken(options);
 }
 
 

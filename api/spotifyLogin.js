@@ -1,5 +1,5 @@
 const router              = require("express").Router(),
-      spotifyService      = require("../services/spotifyLogin"),
+      spotifyService      = require("../services/authorizationCode"),
       log                 = require("../services/log"),
       config              = require("../config/app"),
       successRedirectTo   = config.redirect.onLoginSuccess,
@@ -55,7 +55,7 @@ router.get("/callback", (req, res) => {
         return;
     }
 
-    spotifyService.getTokens(requestCode)
+    spotifyService.getAuthorizationCodeTokens(requestCode)
     .then(tokens => {
         log.debug("GET /callback -> Writing tokens to session");
         req.session.access_token    = tokens.access_token;

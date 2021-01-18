@@ -1,6 +1,6 @@
 const router             = require("express").Router(),
-      spotifyService     = require("../services/spotifySearch"),
-      log                = require("../services/log");
+      spotifyService     = require("../services/search"),
+      log                = require("../services/Log");
 
 /**
  * Route used for searching Spotify via the Spotify search api.

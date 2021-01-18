@@ -1,5 +1,4 @@
 const axios = require("axios");
-const { response } = require("express");
 const log   = require("../services/log");
 
 const SpotifyDao = {
@@ -33,29 +32,6 @@ const SpotifyDao = {
     },
 
     /**
-     * Makes an http request based on the options provided.
-     * 
-     * @param {object} options used in axios http request.
-     * @returns Promise containing {token: 'sometokenfromspotify'}
-     */
-    getClientCredentialsToken: options => {
-        log.debug("SpotifyDao.getClientCredentialsToken()", options);
-
-        return axios(options)
-
-        .then(response => {
-            log.debug("Client Credentials token retrieved successfully.");
-
-            return response.data.access_token;
-        })
-
-        .catch(error => {
-            throw new Error("Could not get client credential token. " +
-            error.response.status + " " + error.response.statusText);
-        });
-    },
-
-    /**
      * Makes http request based on options provided. The response is expected
      * to contain a data object with search results
      *
@@ -78,24 +54,7 @@ const SpotifyDao = {
                 throw new Error("Could not get search results from Spotify API. " +
                 error.response.status + " " + error.response.statusText);
             });
-    },
-
-    getProfile: options => {
-        log.debug("SpotifyDao.getProfile()", options);
-
-        return axios(options)
-
-            .then(response => {
-                return response.data;
-            })
-
-            .catch((error) => {
-                throw new Error("Could not get profile information. " +
-                error.response.status + " " + error.response.statusText);
-            });
-    },
-
-    
+    },    
 };
 
 module.exports = SpotifyDao;
