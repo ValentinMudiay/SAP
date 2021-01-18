@@ -48,9 +48,11 @@ module.exports = {
     // Configuration relating specifically to access and refresh tokens
     token: {
         url: 'https://accounts.spotify.com/api/token',
+        clientCredentialsToken: "",
+        clientCredentialsTokenRefreshInterval: 1000 * 60 * 30, // 1000ms * 60sec * 30min
     },
 
-    clientCredentialsToken: "",
+    
 
     profile: {
         url: 'https://api.spotify.com/v1/me',

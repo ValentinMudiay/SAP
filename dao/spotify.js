@@ -27,9 +27,8 @@ const SpotifyDao = {
             })
 
             .catch(error => {
-                log.debug(`Error: Status code ${error.response.status}`, 
-                                                error.response.statusText);
-                throw new Error("Could not get token from Spotify API.");
+                throw new Error("Could not get token from Spotify API. " +
+                error.response.status + " " + error.response.statusText);
             });
     },
 
@@ -51,9 +50,8 @@ const SpotifyDao = {
         })
 
         .catch(error => {
-            log.debug(`Error: Status code ${error.response.status}`, 
-                                            error.response.statusText);
-            throw new Error("Could not retrieve new client credential token.");
+            throw new Error("Could not get client credential token. " +
+            error.response.status + " " + error.response.statusText);
         });
     },
 
@@ -73,18 +71,12 @@ const SpotifyDao = {
         return axios(options)
 
             .then(response => {
-                // TODO: Destructure and return the response data
                 return response;
             })
 
             .catch(error => {
-                // log.debug(`Error: Status code ${error.response.status}`, 
-                //                                 error.response.statusText);
-                throw {
-                    error: error,
-                    message: `Could not get search results from Spotify API. ${error.response.statusText}`,
-                    status: error.response.status
-                };
+                throw new Error("Could not get search results from Spotify API. " +
+                error.response.status + " " + error.response.statusText);
             });
     },
 
@@ -98,9 +90,8 @@ const SpotifyDao = {
             })
 
             .catch((error) => {
-                log.debug(`Error: Status code ${error.response.status}`, 
-                                                error.response.statusText);
-                throw new Error("Could not get profile information.");
+                throw new Error("Could not get profile information. " +
+                error.response.status + " " + error.response.statusText);
             });
     },
 

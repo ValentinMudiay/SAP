@@ -18,30 +18,18 @@ router.get("/", (req, res) => {
     log.debug("GET /search ->", "query = " + req.query.q);
     
     const query = req.query.q,
-          isTypeahead = req.query.typeahead === "true";
-    
-    let token = req.session.access_token;
-
-    // spotifyService.setClientCredentialsToken(); // used for debugging this method
+          isTypeahead = req.query.typeahead === "true",
+          token = req.session.access_token;
 
     spotifyService.search(query, isTypeahead, token)
     .then(result => {
-        log.debug("SEARCH RESULTS >>>>>>>>>>>>>>>>\n" + result);
+        res.status(200).json(result);
     })
     .catch(error => {
         console.log(error);
     });
-    
 
 
-    // spotifyDao.search(options)
-    // .then(response => {
-    //     res.json(response.data); // TODO: update to return appropriate response
-    // })
-    // .catch(error => {
-    //     log.debug(error)
-    //     log.debug("Unable to get search.");
-    // });
     
 
 });
