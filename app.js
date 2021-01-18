@@ -14,7 +14,7 @@ const config     = require("./config/app"),
       spotify    = require("./config/spotify");
 
 // Services
-const clientCredentialService = require("./services/ClientCredential");
+const clientCredentialService = require("./services/clientCredential");
       
 // NPM Packages
 const bodyParser = require("body-parser"),
