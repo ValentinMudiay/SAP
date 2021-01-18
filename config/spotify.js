@@ -1,3 +1,4 @@
+const config = require("./app");
 module.exports = {
     // Client ID provided by Spotify for this application
     client_id        : process.env.CLIENT_ID,
@@ -29,7 +30,7 @@ module.exports = {
             q:      "",
             type:   "playlist",
             market: "US",
-            limit:  3,
+            limit:  10,
             offset: 0
         },
         options:    {
@@ -47,7 +48,11 @@ module.exports = {
     // Configuration relating specifically to access and refresh tokens
     token: {
         url: 'https://accounts.spotify.com/api/token',
+        clientCredentialsToken: "",
+        clientCredentialsTokenRefreshInterval: 1000 * 60 * 30, // 1000ms * 60sec * 30min
     },
+
+    
 
     profile: {
         url: 'https://api.spotify.com/v1/me',
