@@ -1,4 +1,4 @@
-const { jsonToQueryStr } = require("./Querystring"),
+const { jsonToQueryStr } = require("./querystring"),
       config             = require("../config/app"),
       spotify            = require("../config/spotify"),
       spotifyDao         = require("../dao/spotify"),
