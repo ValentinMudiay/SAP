@@ -1,5 +1,5 @@
 const spotify            = require("../config/spotify"),
-      tokenService         = require("./token");
+      tokenService       = require("./token");
 
 
 module.exports = {
