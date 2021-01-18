@@ -2,13 +2,16 @@ const spotify            = require("../config/spotify"),
       spotifyDao         = require("../dao/spotify"),
       { jsonToQueryStr } = require("../services/queryString");
 
-// set token on server startup
-setClientCredentialsToken();
 
-// refresh token at intervals based on config
-refreshClientCredentialsTokenAtIntervals(
-    spotify.token.clientCredentialsTokenRefreshInterval
-);
+module.exports = {
+    beginCycle: (interval) => {
+        // set token on server startup
+        setClientCredentialsToken();
+
+        // then refresh token at intervals thereafter
+        refreshClientCredentialsTokenAtIntervals(interval);
+    },
+};
 
 /**
  * Gets a new Spotify token every 'delay' milliseconds, and sets the Client
