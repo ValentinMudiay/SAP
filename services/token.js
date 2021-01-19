@@ -30,9 +30,7 @@ const SpotifyTokenService = {
             }
         }
         
-        const authStr        = spotifyConfig.client_id + ":" + spotifyConfig.client_secret,
-              buffer         = new Buffer.from(authStr),
-              encodedAuthStr = buffer.toString("base64"),
+        const encodedAuthStr = getEncodedClientIdAndSecret(),
               dataStr        = jsonToQueryStr(data);
 
         return {
@@ -50,6 +48,39 @@ const SpotifyTokenService = {
     getToken: options => {
         return spotifyDao.getToken(options);
     },
+
+    getRefreshTokenOptions: refreshToken => {
+        const data = {
+            "grant_type"    : "refresh_token",
+            "refresh_token" : refreshToken
+        };
+
+        const encodedAuthStr = getEncodedClientIdAndSecret(),
+              dataStr        = jsonToQueryStr(data);
+        
+        return {
+            "method": "post",
+            "url"   : spotifyConfig.token.url,
+            "data"  : dataStr,
+            "headers": {
+                "Authorization" : "Basid " + encodedAuthStr,
+                "Content-Type"  : "application/x-www-form-urlencoded"
+            },
+            "json": true
+        };
+    },
 };
 
+/**
+ * Encodes this app's Spotify clientId and clientSecret as a Base64 string.
+ * 
+ * @returns Base64 encoded ClientID:ClientSecret
+ */
+function getEncodedClientIdAndSecret() {
+    const authStr        = spotifyConfig.client_id + ":" + spotifyConfig.client_secret,
+          buffer         = new Buffer.from(authStr),
+          encodedAuthStr = buffer.toString("base64");
+
+          return encodedAuthStr;
+}
 module.exports = SpotifyTokenService;
