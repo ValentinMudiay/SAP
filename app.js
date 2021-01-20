@@ -5,6 +5,7 @@ const rootApi    = require("./api/index"),
       isLoggedIn = require("./api/authChecker"),
       authApi    = require("./api/spotifyLogin"),
       searchApi  = require("./api/spotifySearch"),
+      saveApi    = require("./api/save"),
       emailApi   = require("./api/emailCapture"),
       frontendConfigApi = require("./api/config"),
       underConstruction = require("./api/underConstruction");
@@ -36,6 +37,7 @@ app.use("/", underConstruction, rootApi);
 app.use("/getConfig", frontendConfigApi);
 app.use("/login", underConstruction, authApi);
 app.use("/search", underConstruction, searchApi);
+app.use("/save", saveApi);
 app.use("/notify-launch", emailApi);
 
 // Static route for serving static files

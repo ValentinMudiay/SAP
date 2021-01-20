@@ -60,10 +60,11 @@ function getAddBtn(playlist) {
     const addBtn = document.createElement("button");
     addBtn.innerText = " + ";
 
-    const playlistId = playlist.id;
+    // const playlistId = playlist.id;
+    // const playlistId = playlist.tracks.href;
     
     addBtn.addEventListener("click", event => {
-        addPlaylist(playlistId)
+        addPlaylist(playlist)
         .then(response => {
             console.log(response);
         })
@@ -74,21 +75,42 @@ function getAddBtn(playlist) {
     return addBtn;
 }
 
-function addPlaylist(playlistId) {
+function addPlaylist(playlist) {
     const data = {
-        playlistId: playlistId
+        playlist_id: playlist.id,
+        tracks: playlist.tracks.href,
+        total: playlist.tracks.total,
     };
+
+    const dataStr = jsonToQueryStr(data);
 
     return fetch("/save", {
        "method": "POST",
-       "body": JSON.stringify(data),
+       "body": dataStr,
        "headers": {
-           "Content-Type": "application/json",
+           "Content-Type": "application/x-www-form-urlencoded",
        }
    })
-    .then(res => res.json())
+    .then(res => res.text())
     .then(data => data)
     .catch(err => console.error(err));
+}
+
+/**
+ * Converts a one dimensional Javascript object to query string format.
+ * 
+ * @param {object} json Object to be converted.
+ * @returns {string} a query string that can be appended to a URL.
+ */
+function jsonToQueryStr(json) {
+    let str = "";
+
+    Object.keys(json).forEach((key, i, arr) => {
+        str += `${key}=${json[key]}`;
+        str += i !== arr.length-1 ? "&" : "";
+    });
+
+    return str;
 }
 
 /* Returned playlist
