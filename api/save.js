@@ -4,9 +4,9 @@ const playlist = require("../services/playlist");
 const user = require("../services/user");
 
 router.post("/", (req, res) => {
-    console.log("Save request received -> ", req.body);
+    log.debug("POST /save -> Save request received ", req.body);
     
-    log.debug("Getting Spotify User Id...");
+    log.debug("POST /save -> Getting Spotify User Id...");
 
     // Can move this logic into its own middleware and add
     // to the save route
@@ -56,7 +56,7 @@ router.post("/", (req, res) => {
         const { tracksUrl, totalTracks } = req.body;
 
         const playlistDetails = {
-            name: "SAP TEST",
+            name: "SAP TEST GETTING TRACKS", // TODO: UPDATE TO DYNAMIC NAME AND DESC
             description: "test desc",
             public: false,
             tracks: tracksUrl,

@@ -10,7 +10,10 @@ const searchInput = document.getElementById("search");
 function search(query) {
    return fetch(`/search?q=${query}&typeahead=true`)
     .then(res => res.json())
-    .then(data => data)
+    .then(data => {
+        console.log(data);
+        return data;
+    })
     .catch(err => console.error(err));
 }
 
