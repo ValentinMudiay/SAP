@@ -1,3 +1,5 @@
 Parameterize Authorization Code options - i.e. scope
 Handle dynamic route after successful login
 Validate token prior to executing search
+Organize options - some options are in config, others are in services
+Get refresh token if access token expired

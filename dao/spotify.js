@@ -27,32 +27,32 @@ const SpotifyDao = {
 
             .catch(error => {
                 throw new Error("Could not get token from Spotify API. " +
-                error.response.status + " " + error.response.statusText);
+                error);
             });
     },
 
     /**
      * Makes http request based on options provided. The response is expected
-     * to contain a data object with search results
+     * to contain a data object
      *
-     * For additional information on the Spotify search api, see:
-     * https://developer.spotify.com/documentation/web-api/reference/search/search/
-     *  
+     * For additional information on the Spotify  api, see:
+     * https://developer.spotify.com/documentation/web-api/reference/
+     * 
      * @param {object} options 
-     * @returns Promise containing search results in the response
+     * @returns Promise containing http response from Spotify
      */
-    search: options => {
-        log.debug("SpotifyDao.search()", options);
+    request: options => {
+        log.debug("SpotifyDao.request()", options);
 
         return axios(options)
 
             .then(response => {
-                return response;
+                return response.data;
             })
 
             .catch(error => {
-                throw new Error("Could not get search results from Spotify API. " +
-                error.response.status + " " + error.response.statusText);
+                throw new Error("There was an error using the Spotify API. " +
+                error);
             });
     },    
 };

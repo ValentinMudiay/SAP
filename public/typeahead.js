@@ -77,9 +77,9 @@ function getAddBtn(playlist) {
 
 function addPlaylist(playlist) {
     const data = {
-        playlist_id: playlist.id,
-        tracks: playlist.tracks.href,
-        total: playlist.tracks.total,
+        playlistId: playlist.id,
+        tracksUrl: playlist.tracks.href,
+        totalTracks: playlist.tracks.total,
     };
 
     const dataStr = jsonToQueryStr(data);

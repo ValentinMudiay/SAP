@@ -1,4 +1,5 @@
 const spotify            = require("../config/spotify"),
+      log                = require("../services/log"),
       tokenService       = require("./token");
 
 
@@ -52,7 +53,9 @@ function setClientCredentialsToken() {
  */
 function getNewClientCredentialsToken() {
     const options = tokenService.getTokenOptions();
-    return tokenService.getToken(options);
+    return tokenService.getToken(options)
+    .then(response => response)
+    .catch(err => log.debug(err));
 }
 
 

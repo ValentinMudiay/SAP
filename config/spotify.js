@@ -17,7 +17,7 @@ module.exports = {
             response_type  : "code",
             redirect_uri   : "",
             state          : "",
-            scope          : "user-read-email user-read-private",
+            scope          : "playlist-modify-public playlist-modify-private",
             show_dialog    : false
         }
     },
@@ -51,6 +51,11 @@ module.exports = {
         clientCredentialsTokenRefreshInterval: 1000 * 60 * 30, // 1000ms * 60sec * 30min
     },
 
+
+    playlist: {
+        defaultDescription: 
+        "This playlist was created by www.saveaplaylist.com"
+    },
     
 
     profile: {

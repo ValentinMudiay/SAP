@@ -96,14 +96,16 @@ function getSearchUrl(query, isTypeahead) {
 function getSearchResults(url, token) {
     const options = getSearchOptions(url, token); 
 
-    log.debug("SpotifySearch.getSearchResults() -> Options:", options);
-    return spotifyDao.search(options)
+    log.debug("SpotifySearch.getSearchResults() -> " +
+              "Sending request to Spotify search API");
+
+    return spotifyDao.request(options)
     .then(response => {
         if(response)
             return response.data;
     })
     .catch(error => {
-        log.debug("Unable to get typeahead search... " +
+        log.debug("Unable to get search results from Spotify... " +
                     "\nStatus code " + error.status);
 
         throw(error);

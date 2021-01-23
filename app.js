@@ -31,6 +31,7 @@ app.use(helmet());
 app.use(config.session);
 
 app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
 
 // Routes
 app.use("/", underConstruction, rootApi);

@@ -1,5 +1,7 @@
+const { response } = require("express");
 const spotifyDao = require("../dao/spotify"),
       spotifyConfig = require("../config/spotify"),
+      log = require("../services/log"),
       { jsonToQueryStr } = require("./querystring");
 
 const SpotifyTokenService = {
@@ -46,7 +48,9 @@ const SpotifyTokenService = {
     },
 
     getToken: options => {
-        return spotifyDao.getToken(options);
+        return spotifyDao.getToken(options)
+        .then(response => response)
+        .catch(err => log.debug(err));
     },
 
     getRefreshTokenOptions: refreshToken => {
