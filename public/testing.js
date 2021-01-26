@@ -15,7 +15,7 @@ function addEventListeners() {
     createPlaylistBtn.addEventListener("click", function(event) {
         console.log("createPlaylistBtn clicked");
 
-        const data = { tracksUrl: "", totalTracks: 9 };
+        const data = { tracksUrl: "" };
 
         const dataStr = jsonToQueryStr(data);
 

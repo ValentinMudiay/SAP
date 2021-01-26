@@ -1,47 +1,54 @@
-// get tracks
-// create/publish playlists
-
 const log = require("./log");
 const axios = require("axios");
-
 const spotify = require("../config/spotify");
 
-// add tracks
 const PlaylistService = {
-    createNewPlaylist: function(user, token, details) {
-
-    },
 
     republishPlaylist: function() {
 
     },
 
-    getTracks: function(tracksUrl) {
-        const url = tracksUrl + "?limit=10";
-    },
-
+    /**
+     * Creates a new playlist in the current user's Spotify account, and adds
+     * tracks to the new playlist from another playlist's tracks url specified
+     * in the details object.
+     * 
+     * @param {string} user Spotify user id of user for whom we want to create
+     *                      a playlist
+     * @param {string} token Spotify access_token used to authenticate the http
+     *                       request
+     * @param {object} details Object containing playlist name, description,
+     *                         tracks url, and public boolean flag
+     */
     createPlaylistFromTracks: function(user, token, details) {
-        const {name, description, public, tracks} = details;
+        const { name, description, public, tracks } = details;
 
         const items = [];
 
         return createEmptyPlaylist(name, description, public, user, token)
         .then(playlist => {
             // return addItemsToPlaylist(items, playlist.id, token);
-            return getItemsFromExistingPlaylist(tracks, true, items, token)
-            .then(response => {
-                log.debug("Number of track uris retrieved", response.length);
-            });
+            return getItemsFromExistingPlaylist(tracks, true, items, token);
+        })
+        .then(uris => {
+            log.debug("Number of track uris retrieved", uris.length);
         })
         .catch(err => log.debug(err));
-
-        
-
     },
-
-
 };
 
+/**
+ * Creates an empty playlist in the user's Spotify account. 
+ * Tracks are added to this playlist later.
+ * 
+ * @param {string} name Name of the playlist to be created.
+ * @param {string} description Description of the playlist added to Spotify
+ * @param {boolean} public If true, the created playlist will be public
+ * @param {string} user Spotify user id of the user to which the new playlist belongs
+ * @param {string} token Token used in the Spotify API request
+ * 
+ * @returns Promise containing the response from the playlist API
+ */
 function createEmptyPlaylist(name, description, public, user, token) {
 
     const data = {
@@ -68,6 +75,7 @@ function createEmptyPlaylist(name, description, public, user, token) {
     .then(response => {
         log.debug("Playlist.createEmptyPlaylist() -> Successfully created playlist");
         // log.debug("Playlist created response ->", response);
+        // Need to return the response
     })
     .catch(err => console.error(err));
 }
@@ -98,16 +106,20 @@ function addItemsToPlaylist(items, playlist, token) {
     .catch(err => console.error(err));
 }
 
-
-
-
-// Get track uris and add them to 'items' array
-// isFirst flag true will set the url params
-// every subsequent call to this method will use the 'next' href in the response
-// This method is called recursively until 'next' is null
+/**
+ * Get track URIs and add the URIs to the 'items' array.
+ * This method is called recursively when the 'next'
+ * response parameter is not null. On the first call of
+ * this method, isFirst should be set to true. This will
+ * append the url with the appropriate parameters for
+ * requesting the track URIs.
+ * 
+ * @param {string} url URL of playlist tracks
+ * @param {boolean} isFirst if true, url parameters will be appended to the url
+ * @param {array} items array to store retrieved items
+ * @param {string} token token used to authenticate the request to Spotify
+ */
 function getItemsFromExistingPlaylist(url, isFirst, items, token) {
-    
-
     if(isFirst) {
         url = `${url}?fields=next%2Citems(track(uri))&limit=100&offset=0`;
     }
@@ -147,10 +159,15 @@ function getItemsFromExistingPlaylist(url, isFirst, items, token) {
     .catch(err => console.error(err));
 }
 
+/**
+ * Wrapper mehtod for making http requests.
+ * 
+ * @param {object} options Axios http request options.
+ */
 function sendRequest(options) {
     return axios(options)
     .then(response => {
-        // console.log(response.data);
+        // log.debug(response.data);
         return(response.data);
     })
     .catch(err => console.error(err));

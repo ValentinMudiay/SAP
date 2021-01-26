@@ -38,7 +38,7 @@ app.use("/", underConstruction, rootApi);
 app.use("/getConfig", frontendConfigApi);
 app.use("/login", underConstruction, authApi);
 app.use("/search", underConstruction, searchApi);
-app.use("/save", saveApi);
+app.use("/save", isLoggedIn.viaSpotify, saveApi);
 app.use("/notify-launch", emailApi);
 
 // Static route for serving static files
