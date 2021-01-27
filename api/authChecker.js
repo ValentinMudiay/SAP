@@ -35,14 +35,14 @@ module.exports = {
                     return next();
                 })
                 .catch(err => {
-                    log.debug(err);
+                    log.debug("Could not get Spotify user id.", err);
                     return res.status(403).send("Could not get user id").end();
                 });
         }
 
         // No access_token found
         else {
-            log.debug("DEBUG >>>> ", req.session.user_id, req.session.access_token);
+            log.debug("AuthChecker.viaSpotify() -> No access_token found");
             return res.status(401).send("Spotify account not connected").end();
         }
     },
