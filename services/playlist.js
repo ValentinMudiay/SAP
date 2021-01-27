@@ -1,6 +1,7 @@
 const log = require("./log");
 const spotifyDao = require("../dao/spotify");
 const spotify = require("../config/spotify");
+const {jsonToQueryStr} = require("../services/querystring")
 
 const PlaylistService = {
 
@@ -74,7 +75,7 @@ function createEmptyPlaylist(name, description, public, user, token) {
     return spotifyDao.request(options)
     .then(response => {
         log.debug("Playlist.createEmptyPlaylist() -> Successfully created playlist");
-        // log.debug("Playlist created response ->", response);
+        log.debug("Playlist created response ->", response);
         // Need to return the response
     })
     .catch(err => console.error(err));
@@ -121,7 +122,13 @@ function addItemsToPlaylist(items, playlist, token) {
  */
 function getItemsFromExistingPlaylist(url, isFirst, items, token) {
     if(isFirst) {
-        url = `${url}?fields=next%2Citems(track(uri))&limit=100&offset=0`;
+        const params = {
+            fields: "next,items(track(uri))",
+            limit: 100,
+            offset: 0
+        };
+
+        url = `${url}?${jsonToQueryStr(params)}`;
     }
 
     const options = {
@@ -144,15 +151,14 @@ function getItemsFromExistingPlaylist(url, isFirst, items, token) {
 
         if(response.next) {
             return getItemsFromExistingPlaylist(response.next, false, items, token)
-            .then(response => {
+            .then(() => {
                 return items;
             })
             .catch(err => console.error(err));
         }
 
         log.debug("Playlist.getItemsFromExistingPlaylist() -> " + 
-                  "Successfully retrieved all items from track url " + url);
-        // log.debug("Retrieved items -> ", response);
+                  "Successfully retrieved all items.");
 
         return items;
     })
