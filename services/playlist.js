@@ -1,5 +1,5 @@
 const log = require("./log");
-const axios = require("axios");
+const spotifyDao = require("../dao/spotify");
 const spotify = require("../config/spotify");
 
 const PlaylistService = {
@@ -71,7 +71,7 @@ function createEmptyPlaylist(name, description, public, user, token) {
     };
 
     log.debug("Playlist.createEmptyPlaylist() -> Creating playlist: " + name);
-    return sendRequest(options)
+    return spotifyDao.request(options)
     .then(response => {
         log.debug("Playlist.createEmptyPlaylist() -> Successfully created playlist");
         // log.debug("Playlist created response ->", response);
@@ -98,7 +98,7 @@ function addItemsToPlaylist(items, playlist, token) {
         },
     };
 
-    return sendRequest(options)
+    return spotifyDao.request(options)
     .then(response => {
         log.debug("Playlist.addItemsToPlaylist() -> " + 
                   "Successfully added items to playlist", response);
@@ -135,7 +135,7 @@ function getItemsFromExistingPlaylist(url, isFirst, items, token) {
     };
 
     log.debug(`Playlist.getItemsFromExistingPlaylist() -> Getting items from playlist ${url}`);
-    return sendRequest(options)
+    return spotifyDao.request(options)
     .then(response => {
 
         response.items.forEach(item => {
@@ -155,20 +155,6 @@ function getItemsFromExistingPlaylist(url, isFirst, items, token) {
         // log.debug("Retrieved items -> ", response);
 
         return items;
-    })
-    .catch(err => console.error(err));
-}
-
-/**
- * Wrapper mehtod for making http requests.
- * 
- * @param {object} options Axios http request options.
- */
-function sendRequest(options) {
-    return axios(options)
-    .then(response => {
-        // log.debug(response.data);
-        return(response.data);
     })
     .catch(err => console.error(err));
 }
