@@ -27,12 +27,17 @@ const PlaylistService = {
         const items = [];
 
         return createEmptyPlaylist(name, description, public, user, token)
-        .then(playlist => {
-            // return addItemsToPlaylist(items, playlist.id, token);
-            return getItemsFromExistingPlaylist(tracks, true, items, token);
+        .then(newPlaylistId => {
+            return getItemsFromExistingPlaylist(tracks, true, items, token)
+            .then(list => {
+                return { list, newPlaylistId };
+            })
+            .catch(err => log.debug(err));
         })
-        .then(uris => {
-            log.debug("Number of track uris retrieved", uris.length);
+        .then(pkg => {
+            log.debug("Number of track uris retrieved", (pkg.list.length));
+
+            addItemsToPlaylist(pkg.list, pkg.newPlaylistId, token);
         })
         .catch(err => log.debug(err));
     },
@@ -48,7 +53,7 @@ const PlaylistService = {
  * @param {string} user Spotify user id of the user to which the new playlist belongs
  * @param {string} token Token used in the Spotify API request
  * 
- * @returns Promise containing the response from the playlist API
+ * @returns Promise containing the id of the newly created playlist
  */
 function createEmptyPlaylist(name, description, public, user, token) {
 
@@ -73,21 +78,44 @@ function createEmptyPlaylist(name, description, public, user, token) {
 
     log.debug("Playlist.createEmptyPlaylist() -> Creating playlist: " + name);
     return spotifyDao.request(options)
-    .then(response => {
+    .then(newPlaylist => {
         log.debug("Playlist.createEmptyPlaylist() -> Successfully created playlist");
-        log.debug("Playlist created response ->", response);
+        // log.debug("Playlist created response ->", response);
+
+        return newPlaylist.id;
         // Need to return the response
     })
     .catch(err => console.error(err));
 }
 
-function addItemsToPlaylist(items, playlist, token) {
+/**
+ * Adds items (tracks, podcasts, videos, etc.) to a playlist. Spotify requires
+ * items to be added 100 at a time.
+ * 
+ * @param {array} items Array of string uris for each item to add to the playlist
+ * @param {string} playlist Id of playlist to which items are added
+ * @param {string} token Spotify access_token
+ * @param {number} offset Number by which to multiply the start index by
+ */
+function addItemsToPlaylist(items, playlist, token, offset = 0) {
+    const limit = 100;
+    const start = offset * limit;
+    let end = start + limit;
 
-    const data = {
-        "uris": items
-    };
+    if(end > items.length) {
+        end = start + (items.length % limit); // should be the same as end = items.length
+    }
 
+    log.debug(`Playlist.addItemsToPlaylist() -> Adding tracks ${start + 1} - ${end}`);
+    // log.debug(`Playlist.addItemsToPlaylist() -> Offset: ${offset}, No. of Items: ${items.length}`);
+
+    const itemsToAdd = items.slice(start, end);
+    
     const url = `https://api.spotify.com/v1/playlists/${playlist}/tracks`;
+    
+    const data = {
+        "uris": itemsToAdd,
+    };
 
     const options = {
         "method": "post",
@@ -101,8 +129,14 @@ function addItemsToPlaylist(items, playlist, token) {
 
     return spotifyDao.request(options)
     .then(response => {
-        log.debug("Playlist.addItemsToPlaylist() -> " + 
-                  "Successfully added items to playlist", response);
+        
+        if(end === items.length) {
+            log.debug("Playlist.addItemsToPlaylist() -> " + 
+                      "Successfully added items to playlist");
+            return {ok: true};
+        }
+        else return addItemsToPlaylist(items, playlist, token, ++offset);
+
     })
     .catch(err => console.error(err));
 }
