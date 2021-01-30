@@ -80,12 +80,14 @@ function createEmptyPlaylist(name, description, public, user, token) {
 
 /**
  * Adds items (tracks, podcasts, videos, etc.) to a playlist. Spotify requires
- * items to be added 100 at a time.
+ * items to be added, at most, 100 at a time. If we have more that 100 items in
+ * the items array, we recurisively call this method for each set of 100, 
+ * making an htttp request for each method call.
  * 
  * @param {array} items Array of string uris for each item to add to the playlist
  * @param {string} playlist Id of playlist to which items are added
  * @param {string} token Spotify access_token
- * @param {number} offset Number by which to multiply the start index by
+ * @param {number} offset Offest times the max number of items is the start index
  */
 function addItemsToPlaylist(items, playlist, token, offset = 0) {
     const limit = 100;
