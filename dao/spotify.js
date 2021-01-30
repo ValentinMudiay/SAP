@@ -32,6 +32,31 @@ const SpotifyDao = {
     },
 
     /**
+     * Generates an object to be used in a call to the axios() method.
+     * 
+     * @param {string} method Http method
+     * @param {string} url Endpoint
+     * @param {object} data Data to be sent in the request body
+     * @param {string} token Bearer access token tied to this request
+     */
+    getJsonRequestOptions: function(method, url, token, data) {
+        const options = {
+            "method": method,
+            "url": url,
+            "headers": {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
+            },
+            "json": true
+        };
+
+        if(data) 
+            options.data = typeof(data) == "string" ? data : JSON.stringify(data);
+
+        return options;
+    },
+
+    /**
      * Makes http request based on options provided. The response is expected
      * to contain a data object
      *

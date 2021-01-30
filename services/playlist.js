@@ -64,17 +64,7 @@ function createEmptyPlaylist(name, description, public, user, token) {
     };
 
     const url = `https://api.spotify.com/v1/users/${user}/playlists`;
-
-    const options = {
-        "method": "post",
-        "url": url,
-        "data": JSON.stringify(data),
-        "headers": {
-            "Authorization": "Bearer " + token,
-            "Content-Type": "application/json",
-        },
-        "json": true
-    };
+    const options = spotifyDao.getJsonRequestOptions("post", url, token, data);
 
     log.debug("Playlist.createEmptyPlaylist() -> Creating playlist: " + name);
     return spotifyDao.request(options)
@@ -111,28 +101,18 @@ function addItemsToPlaylist(items, playlist, token, offset = 0) {
 
     const itemsToAdd = items.slice(start, end);
     
-    const url = `https://api.spotify.com/v1/playlists/${playlist}/tracks`;
-    
-    const data = {
-        "uris": itemsToAdd,
-    };
+    const data = {"uris": itemsToAdd};
 
-    const options = {
-        "method": "post",
-        "url": url,
-        "data": JSON.stringify(data),
-        "headers": {
-            "Authorization": "Bearer " + token,
-            "Content-Type": "application/json"
-        },
-    };
+    const url = `https://api.spotify.com/v1/playlists/${playlist}/tracks`;
+
+    const options = spotifyDao.getJsonRequestOptions("post", url, token, data);
 
     return spotifyDao.request(options)
     .then(response => {
         
         if(end === items.length) {
             log.debug("Playlist.addItemsToPlaylist() -> " + 
-                      "Successfully added items to playlist");
+                      "Successfully added " + end + " items to playlist");
             return {ok: true};
         }
         else return addItemsToPlaylist(items, playlist, token, ++offset);
@@ -165,15 +145,7 @@ function getItemsFromExistingPlaylist(url, isFirst, items, token) {
         url = `${url}?${jsonToQueryStr(params)}`;
     }
 
-    const options = {
-        "method": "get",
-        "url": url,
-        "headers": {
-            "Authorization": "Bearer " + token,
-            "Content-Type": "application/json"
-        },
-        "json": true
-    };
+    const options = spotifyDao.getJsonRequestOptions("get", url, token);
 
     log.debug(`Playlist.getItemsFromExistingPlaylist() -> Getting items from playlist ${url}`);
     return spotifyDao.request(options)
