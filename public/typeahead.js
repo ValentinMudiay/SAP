@@ -96,8 +96,10 @@ function getAddBtn(playlist) {
 
 function addPlaylist(playlist) {
     const data = {
-        playlistId: playlist.id,
+        id: playlist.id,
+        name: playlist.name,
         tracksUrl: playlist.tracks.href,
+        dateTimeStr: new Date().toString(),
         // totalTracks: playlist.tracks.total,
     };
 
