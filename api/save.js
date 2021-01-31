@@ -5,13 +5,11 @@ const { getFormattedDateStr } = require("../services/utils");
 
 router.post("/", (req, res) => {
     log.debug("POST /save -> Save request received ", req.body);
-
     const { tracksUrl, name, dateTimeStr } = req.body;
-
-    const today = getFormattedDateStr(dateTimeStr);
-
+    const date = getFormattedDateStr(dateTimeStr);
+    
     const playlistDetails = {
-        name: name + " - Saved on " + today,
+        name: name + " - Saved on " + date,
         description: "test desc",
         public: false,
         tracks: tracksUrl
