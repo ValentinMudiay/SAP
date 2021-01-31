@@ -1,7 +1,7 @@
 const log = require("./log");
 const spotifyDao = require("../dao/spotify");
 const spotify = require("../config/spotify");
-const {jsonToQueryStr} = require("../services/querystring")
+const {jsonToQueryStr} = require("./utils")
 
 const PlaylistService = {
 

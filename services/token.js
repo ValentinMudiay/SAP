@@ -2,7 +2,7 @@ const { response } = require("express");
 const spotifyDao = require("../dao/spotify"),
       spotifyConfig = require("../config/spotify"),
       log = require("../services/log"),
-      { jsonToQueryStr } = require("./querystring");
+      { jsonToQueryStr } = require("./utils");
 
 const SpotifyTokenService = {
     /**

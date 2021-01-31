@@ -1,14 +1,17 @@
 const router = require("express").Router();
 const log = require("../services/log");
 const playlist = require("../services/playlist");
+const { getFormattedDateStr } = require("../services/utils");
 
 router.post("/", (req, res) => {
     log.debug("POST /save -> Save request received ", req.body);
 
-    const { tracksUrl } = req.body;
+    const { tracksUrl, name, dateTimeStr } = req.body;
+
+    const today = getFormattedDateStr(dateTimeStr);
 
     const playlistDetails = {
-        name: "A SAVE A PLAYLIST PLAYLIST", // TODO: UPDATE TO DYNAMIC NAME AND DESC
+        name: name + " - Saved on " + today,
         description: "test desc",
         public: false,
         tracks: tracksUrl

@@ -1,7 +1,7 @@
 const appConfig     = require("../config/app"),
       spotifyConfig = require("../config/spotify"),
       tokenService  = require("./token"),
-      { jsonToQueryStr, getRandomString } = require("./querystring");
+      { jsonToQueryStr, getRandomString } = require("./utils");
 
 const SpotifyLoginService = {
     /**
