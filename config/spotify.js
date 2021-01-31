@@ -1,4 +1,3 @@
-const config = require("./app");
 module.exports = {
     // Client ID provided by Spotify for this application
     client_id        : process.env.CLIENT_ID,
