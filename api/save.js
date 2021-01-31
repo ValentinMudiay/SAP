@@ -9,8 +9,8 @@ router.post("/", (req, res) => {
     const date = getFormattedDateStr(dateTimeStr);
     
     const playlistDetails = {
-        name: name + " - Saved on " + date,
-        description: "test desc",
+        name: decodeURIComponent(name) + " - Saved on " + date,
+        description: 'This playlist was copied from "' + name + '" on ' + date + '.',
         public: false,
         tracks: tracksUrl
     };
