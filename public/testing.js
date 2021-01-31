@@ -55,7 +55,7 @@ function addEventListeners() {
     }
 
     document.getElementById("login").addEventListener("click", event => {
-        poptastic("http://localhost:3001/login");
+        poptastic("/login");
     })
 }
 
