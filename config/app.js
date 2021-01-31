@@ -44,7 +44,7 @@ module.exports = ({
 
     search: {
         // Number of results to return in the playlist search typeahead
-        typeAheadReturnCount: 3, // max 50
+        typeAheadReturnCount: 7, // max 50
         // Number of characters required before typeahead search is executed
         minimumCharsForTypeahead: 3
     },
