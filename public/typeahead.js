@@ -1,6 +1,5 @@
 const searchInput = document.getElementById("search");
 
-
 /**
  * Executes AJAX api call to fetch search results.
  * 
@@ -17,13 +16,17 @@ function search(query) {
     .catch(err => console.error(err));
 }
 
+let oldInputValue = "";
 searchInput.addEventListener("keyup", (event) => {
     const input = searchInput.value;
 
-    const searchStrNoWhiteSpace = input.replace(/ /g, "");
+    const searchStrNoWhiteSpace = input.replace(/ /g, "").toLowerCase();
 
     const { minimumCharsForTypeahead } = window.config;
-
+    
+    // New input is equivalent to old value
+    if(searchStrNoWhiteSpace === oldInputValue) return;
+    
     if(searchStrNoWhiteSpace.length >= minimumCharsForTypeahead) {
         search(input)
         .then(response => {
@@ -35,6 +38,12 @@ searchInput.addEventListener("keyup", (event) => {
             console.error(error);
         });
     }
+
+    if (searchStrNoWhiteSpace.length < minimumCharsForTypeahead) {
+        clearPlaylistResults();
+    }
+    
+    oldInputValue = searchStrNoWhiteSpace;
 });
 
 function displayPlaylistResults(playlists) {
@@ -57,6 +66,13 @@ function displayPlaylistResults(playlists) {
 
     const currentResultsDiv  = document.getElementById("result");
     body.replaceChild(newResultsDiv, currentResultsDiv); // replace results div
+}
+
+function clearPlaylistResults() {
+    const results = document.getElementById("result");
+    if(results.firstElementChild) {
+        results.removeChild(results.firstElementChild);
+    }
 }
 
 function getAddBtn(playlist) {
