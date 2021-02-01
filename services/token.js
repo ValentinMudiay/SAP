@@ -1,4 +1,3 @@
-const { response } = require("express");
 const spotifyDao = require("../dao/spotify"),
       spotifyConfig = require("../config/spotify"),
       log = require("../services/log"),
@@ -67,7 +66,7 @@ const SpotifyTokenService = {
             "url"   : spotifyConfig.token.url,
             "data"  : dataStr,
             "headers": {
-                "Authorization" : "Basid " + encodedAuthStr,
+                "Authorization" : "Basic " + encodedAuthStr,
                 "Content-Type"  : "application/x-www-form-urlencoded"
             },
             "json": true
