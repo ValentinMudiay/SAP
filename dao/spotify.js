@@ -58,28 +58,70 @@ const SpotifyDao = {
 
     /**
      * Makes http request based on options provided. The response is expected
-     * to contain a data object
+     * to contain a data object. If the returned response status is 401, we
+     * refresh the access token and retry the original request.
      *
      * For additional information on the Spotify  api, see:
      * https://developer.spotify.com/documentation/web-api/reference/
      * 
-     * @param {object} options 
+     * @param {object} options Options used in acios request.
+     * @param {string} refreshToken Refresh token used if access token expired.
      * @returns Promise containing http response from Spotify
      */
-    request: options => {
+    request: (options, refreshToken) => {
         log.debug("SpotifyDao.request()", options);
 
         return axios(options)
 
-            .then(response => {
-                return response.data;
-            })
+        .then(response => {
+            return response.data;
+        })
 
-            .catch(error => {
+        .catch(error => {
+            if(error.response.status === 401) {
+                log.debug("SpotifyDao.request() -> Token isn't authorized");
+
+                if(refreshToken) {
+                    return getNewAccessToken(refreshToken)
+                    .then(newAccessToken => {
+                        return retryRequest(newAccessToken, options);
+                    })
+                    .catch(err => log.debug(err));
+                }
+                else {
+                    throw new Error("Could not use refreshed access token. " +
+                    error);
+                }
+            }
+            else {
                 throw new Error("There was an error using the Spotify API. " +
                 error);
-            });
+            }
+        });
     },    
 };
+
+function getNewAccessToken(refreshToken) {
+    const options = require("../services/token").getRefreshTokenOptions(refreshToken);
+
+    log.debug("Refreshing our access token...");
+
+    return axios(options)
+    .then(token => token.access_token)
+    .catch(error => {
+        throw new Error("Could not get new access token using refresh token. " +
+        error);
+    });
+}
+
+function retryRequest(newAccessToken, options) {
+    log.debug("Retrying request with refreshed access token");
+                    
+    const newOptions = JSON.parse(JSON.stringify(options));
+    newOptions.headers.Authorization = "Bearer " + newAccessToken;
+
+    return SpotifyDao.request(newOptions)
+    .catch(err => log.debug(err));
+}
 
 module.exports = SpotifyDao;
