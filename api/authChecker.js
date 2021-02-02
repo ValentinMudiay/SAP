@@ -30,7 +30,7 @@ module.exports = {
 
                 user.getUserId(token)
                 .then(response => {
-                    userId = response;
+                    req.session.user_id = response;
                     log.debug("User id retrieved from Spotify -> " + userId);
         
                     return next();
