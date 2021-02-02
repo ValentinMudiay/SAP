@@ -16,19 +16,18 @@ const PlaylistService = {
      * 
      * @param {string} user Spotify user id of user for whom we want to create
      *                      a playlist
-     * @param {string} token Spotify access_token used to authenticate the http
-     *                       request
+     * @param {object} tokens Object containing access and refresh tokens
      * @param {object} details Object containing playlist name, description,
      *                         tracks url, and public boolean flag
      */
-    createPlaylistFromTracks: function(user, token, details) {
+    createPlaylistFromTracks: function(user, tokens, details) {
         const { name, description, public, tracks } = details;
 
         const items = [];
 
-        return createEmptyPlaylist(name, description, public, user, token)
+        return createEmptyPlaylist(name, description, public, user, tokens)
         .then(newPlaylistId => {
-            return getItemsFromExistingPlaylist(tracks, true, items, token)
+            return getItemsFromExistingPlaylist(tracks, true, items, tokens)
             .then(list => {
                 return { list, newPlaylistId };
             })
@@ -37,7 +36,7 @@ const PlaylistService = {
         .then(pkg => {
             log.debug("Number of track uris retrieved", (pkg.list.length));
 
-            addItemsToPlaylist(pkg.list, pkg.newPlaylistId, token);
+            addItemsToPlaylist(pkg.list, pkg.newPlaylistId, tokens);
         })
         .catch(err => log.debug(err));
     },
@@ -51,11 +50,11 @@ const PlaylistService = {
  * @param {string} description Description of the playlist added to Spotify
  * @param {boolean} public If true, the created playlist will be public
  * @param {string} user Spotify user id of the user to which the new playlist belongs
- * @param {string} token Token used in the Spotify API request
+ * @param {object} tokens Object containing access and refresh tokens
  * 
  * @returns Promise containing the id of the newly created playlist
  */
-function createEmptyPlaylist(name, description, public, user, token) {
+function createEmptyPlaylist(name, description, public, user, tokens) {
 
     const data = {
         "name": name,
@@ -64,10 +63,10 @@ function createEmptyPlaylist(name, description, public, user, token) {
     };
 
     const url = `https://api.spotify.com/v1/users/${user}/playlists`;
-    const options = spotifyDao.getJsonRequestOptions("post", url, token, data);
+    const options = spotifyDao.getJsonRequestOptions("post", url, tokens.access_token, data);
 
     log.debug("Playlist.createEmptyPlaylist() -> Creating playlist: " + name);
-    return spotifyDao.request(options)
+    return spotifyDao.request(options, tokens.refresh_token)
     .then(newPlaylist => {
         log.debug("Playlist.createEmptyPlaylist() -> Successfully created playlist");
         // log.debug("Playlist created response ->", response);
@@ -86,10 +85,10 @@ function createEmptyPlaylist(name, description, public, user, token) {
  * 
  * @param {array} items Array of string uris for each item to add to the playlist
  * @param {string} playlist Id of playlist to which items are added
- * @param {string} token Spotify access_token
+ * @param {object} tokens Spotify access_token and refresh_token
  * @param {number} offset Offest times the max number of items is the start index
  */
-function addItemsToPlaylist(items, playlist, token, offset = 0) {
+function addItemsToPlaylist(items, playlist, tokens, offset = 0) {
     const limit = 100;
     const start = offset * limit;
     let end = start + limit;
@@ -107,9 +106,9 @@ function addItemsToPlaylist(items, playlist, token, offset = 0) {
 
     const url = `https://api.spotify.com/v1/playlists/${playlist}/tracks`;
 
-    const options = spotifyDao.getJsonRequestOptions("post", url, token, data);
+    const options = spotifyDao.getJsonRequestOptions("post", url, tokens.access_token, data);
 
-    return spotifyDao.request(options)
+    return spotifyDao.request(options, tokens.refresh_token)
     .then(response => {
         
         if(end === items.length) {
@@ -117,7 +116,7 @@ function addItemsToPlaylist(items, playlist, token, offset = 0) {
                       "Successfully added " + end + " items to playlist");
             return {ok: true};
         }
-        else return addItemsToPlaylist(items, playlist, token, ++offset);
+        else return addItemsToPlaylist(items, playlist, tokens.access_token, ++offset);
 
     })
     .catch(err => console.error(err));
@@ -134,9 +133,9 @@ function addItemsToPlaylist(items, playlist, token, offset = 0) {
  * @param {string} url URL of playlist tracks
  * @param {boolean} isFirst if true, url parameters will be appended to the url
  * @param {array} items array to store retrieved items
- * @param {string} token token used to authenticate the request to Spotify
+ * @param {object} tokens Access and refresh tokens object
  */
-function getItemsFromExistingPlaylist(url, isFirst, items, token) {
+function getItemsFromExistingPlaylist(url, isFirst, items, tokens) {
     if(isFirst) {
         const params = {
             fields: "next,items(track(uri))",
@@ -147,10 +146,10 @@ function getItemsFromExistingPlaylist(url, isFirst, items, token) {
         url = `${url}?${jsonToQueryStr(params)}`;
     }
 
-    const options = spotifyDao.getJsonRequestOptions("get", url, token);
+    const options = spotifyDao.getJsonRequestOptions("get", url, tokens.access_token);
 
     log.debug(`Playlist.getItemsFromExistingPlaylist() -> Getting items from playlist ${url}`);
-    return spotifyDao.request(options)
+    return spotifyDao.request(options, tokens.refresh_token)
     .then(response => {
 
         response.items.forEach(item => {
@@ -158,7 +157,7 @@ function getItemsFromExistingPlaylist(url, isFirst, items, token) {
         });
 
         if(response.next) {
-            return getItemsFromExistingPlaylist(response.next, false, items, token)
+            return getItemsFromExistingPlaylist(response.next, false, items, tokens.access_token)
             .then(() => {
                 return items;
             })
