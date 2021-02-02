@@ -14,22 +14,23 @@ module.exports = {
      * @returns undefined
      */
     viaSpotify: (req, res, next) => {
+        const token = req.session.tokens ? req.session.tokens.access_token : undefined;
+        const userId = req.session.user_id;
+
         // If we already have user id in the session, continue to next handler
-        if(req.session.user_id !== undefined && 
-            req.session.access_token !== undefined) {
+        if(userId !== undefined && token !== undefined) {
                 log.debug("AuthChecker.viaSpotify() -> User id already in session");
                 return next();
         }
 
         // After logging in, the session user id will be undefined
         // We will need to ask Spotify for it and add it to session
-        else if(req.session.user_id === undefined && 
-            req.session.access_token !== undefined) {
+        else if(userId === undefined && token !== undefined) {
                 log.debug("AuthChecker.viaSpotify() -> Getting Spotify User Id...");
 
-                user.getUserId(req.session.access_token)
-                .then(userId => {
-                    req.session.user_id = userId;
+                user.getUserId(token)
+                .then(response => {
+                    userId = response;
                     log.debug("User id retrieved from Spotify -> " + userId);
         
                     return next();

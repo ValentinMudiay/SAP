@@ -17,7 +17,7 @@ router.post("/", (req, res) => {
     
     playlist.createPlaylistFromTracks(
         req.session.user_id,
-        req.session.access_token,
+        req.session.tokens,
         playlistDetails
     )
     .then(response => {

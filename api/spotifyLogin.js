@@ -58,8 +58,7 @@ router.get("/callback", (req, res) => {
     spotifyService.getAuthorizationCodeTokens(requestCode)
     .then(tokens => {
         log.debug("GET /callback -> Writing tokens to session");
-        req.session.access_token    = tokens.access_token;
-        req.session.refresh_token   = tokens.refresh_token;
+        req.session.tokens = tokens;
 
         log.debug(`GET /login -> Redirecting to ${successRedirectTo}`);
         res.redirect(successRedirectTo);
