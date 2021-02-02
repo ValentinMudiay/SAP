@@ -15,7 +15,7 @@ module.exports = {
      */
     viaSpotify: (req, res, next) => {
         const token = req.session.tokens ? req.session.tokens.access_token : undefined;
-        const userId = req.session.user_id;
+        let userId = req.session.user_id;
 
         // If we already have user id in the session, continue to next handler
         if(userId !== undefined && token !== undefined) {
