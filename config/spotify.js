@@ -1,4 +1,3 @@
-const config = require("./app");
 module.exports = {
     // Client ID provided by Spotify for this application
     client_id        : process.env.CLIENT_ID,
@@ -11,14 +10,13 @@ module.exports = {
     // Configuration used during initial Spotify authenticatiton
     auth: { 
         base         :"https://accounts.spotify.com/authorize",
-        stateKey     : "auth_state",
         redirectPath : "/login/callback",
         options      :      {
             client_id      : process.env.CLIENT_ID,
             response_type  : "code",
             redirect_uri   : "",
             state          : "",
-            scope          : "user-read-email user-read-private",
+            scope          : "playlist-modify-public playlist-modify-private",
             show_dialog    : false
         }
     },
@@ -52,6 +50,11 @@ module.exports = {
         clientCredentialsTokenRefreshInterval: 1000 * 60 * 30, // 1000ms * 60sec * 30min
     },
 
+
+    playlist: {
+        defaultDescription: 
+        "This playlist was created by www.saveaplaylist.com"
+    },
     
 
     profile: {

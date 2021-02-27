@@ -1,5 +1,5 @@
 const router             = require("express").Router(),
-      spotifyService     = require("../services/spotifySearch"),
+      spotifyService     = require("../services/search"),
       log                = require("../services/log");
 
 /**
@@ -19,7 +19,7 @@ router.get("/", (req, res) => {
     
     const query = req.query.q,
           isTypeahead = req.query.typeahead === "true",
-          token = req.session.access_token;
+          token = req.session.tokens ? req.session.tokens.access_token : null;
 
     spotifyService.search(query, isTypeahead, token)
     .then(result => {

@@ -1,4 +1,4 @@
-const { jsonToQueryStr } = require("../services/queryString"),
+const { jsonToQueryStr } = require("./utils"),
       config             = require("../config/app"),
       spotify            = require("../config/spotify"),
       spotifyDao         = require("../dao/spotify"),
@@ -31,6 +31,7 @@ const SpotifySearchService = {
 
         return getSearchResults(url, token)
         .then(results => {
+            // log.debug(results); // debug search results
             return results;
         })
         .catch(error => {
@@ -91,19 +92,21 @@ function getSearchUrl(query, isTypeahead) {
  * @param {string} url URL of the Spotify Search API endpoint
  * @param {string} token Access token used to authenticate the Spotify API
  * 
- * @returns Promise containing the search results returned from Spotify
+ * @returns Promise containing the search results data object from Spotify
  */
 function getSearchResults(url, token) {
     const options = getSearchOptions(url, token); 
 
-    log.debug("SpotifySearch.getSearchResults() -> Options:", options);
-    return spotifyDao.search(options)
+    log.debug("SpotifySearch.getSearchResults() -> " +
+              "Sending request to Spotify search API");
+
+    return spotifyDao.request(options)
     .then(response => {
-        if(response)
-            return response.data;
+        if(response) 
+            return response;
     })
     .catch(error => {
-        log.debug("Unable to get typeahead search... " +
+        log.debug("Unable to get search results from Spotify... " +
                     "\nStatus code " + error.status);
 
         throw(error);
