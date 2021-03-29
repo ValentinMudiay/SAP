@@ -1,0 +1,118 @@
+body {
+    background-color: #5bc057;
+    color: white;
+    font-family: europa, sans-serif;
+    text-align: center;
+}
+
+header {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 43px 0 48px 0;
+}
+
+header span {
+    position: relative;
+    bottom: 15px;
+}
+
+.playlist-icon {
+    width: 35px;
+}
+
+img.panda {
+    width: 220px;
+    height: 220px;
+}
+
+h1 {
+    font-size: 4rem;
+    margin: 0;
+}
+
+label {
+    display: none;
+}
+
+p {
+    color: black;
+    margin: 0;
+}
+
+input[type=email] {
+    border: none;
+    border-radius: 6px 0 0 6px;
+    padding: 14px 0 14px 12px;
+    width: 290px;
+}
+
+input[type=submit] {
+    border: none;
+    background-color: black;
+    color: white;
+    padding: 14px 25px 14px 25px;
+    border-radius: 0 6px 6px 0;
+    position: absolute;
+}
+
+input::placeholder {
+    color: #B7B7B7;
+}
+
+form {
+    position: relative;
+    top: 88px;
+    right: 46px;
+}
+
+.input, .notify-btn {
+    display: inline;
+}
+
+@media only screen and (min-width: 768px) {
+
+    header {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 43px 0 32px 0;
+    }
+
+    .playlist-icon {
+        width: 41px;
+    }
+
+    img.panda {
+        width: 220px;
+        height: 220px;
+    }
+
+    h1 {
+        font-size: 5rem;
+    }
+
+    form {
+        top: 66px;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+
+    header {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 43px 0 93px 0;
+    }
+
+    img.panda {
+        width: 260px;
+        height: 260px;
+    }
+
+    h1 {
+        font-size: 6rem;
+    }
+
+    form {
+        top: 88px;
+    }
+}
