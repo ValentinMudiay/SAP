@@ -1,12 +1,6 @@
-
+/* Style the bones of the page: header, main, footer */
 body {
     font-family: europa, sans-serif;
-}
-main {
-    background-color: #5bc057;
-    color: white;
-    font-family: europa, sans-serif;
-    text-align: center;
 }
 
 header {
@@ -20,8 +14,50 @@ header span {
     bottom: 15px;
 }
 
+main {
+    color: #000000;
+    font-family: europa, sans-serif;
+    text-align: center;
+}
+
+footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #5bc057;
+    color: #ffffff;
+}
+/* End of the base styling for page structure */
+
+/* Style the header navbar */
+.topnavbar {
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+.topnavbar-left a {
+    float: left;
+    color: #5bc057;
+}
 .playlist-icon {
     width: 35px;
+}
+
+.topnavbar-right a {
+    float: right;
+}
+
+#howitworks {
+    color: black;
+}
+#connecttospotify {
+
+}
+.topnavbar::after {
+    content: "";
+    clear: both;
+    display: table;
 }
 
 img.panda {
@@ -73,6 +109,41 @@ form {
     display: inline;
 }
 
+/* Clear the default anchor style */
+a, a:hover, a:focus, a:active {
+    text-decoration: none;
+    color: inherit;
+}
+/* Search Ber Styling */
+form.searchbar input[type=text]{
+    font-size: 17px;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid grey;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    background: white;
+}
+form.searchbar button {
+    width: 10%;
+    padding: 0px;
+    margin: 0px;
+    text-align: left;
+    background: white;
+    color: black;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+}
+form.searchbar button:hover {
+    background: black;
+}
+/* End of Search Bar Styling */
+
+
+
+/* I think it is mobile first design for screen size so the media queries adds on for larger sizes */
 @media only screen and (min-width: 768px) {
 
     header {
