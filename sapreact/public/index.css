@@ -1,6 +1,7 @@
 /* Style the bones of the page: header, main, footer */
 body {
     font-family: europa, sans-serif;
+    opacity: 1;
 }
 
 header {
@@ -15,7 +16,7 @@ header span {
 }
 
 main {
-    color: #000000;
+    color: #121212;
     font-family: europa, sans-serif;
     text-align: center;
 }
@@ -34,21 +35,20 @@ footer{
 .topnavbar {
     padding: 14px 16px;
     text-decoration: none;
-    color: #5bc057;
     text-align: left;
     text-transform: uppercase;
-    opacity: 1;
+}
+.playlist-icon {
+    width: 35px;
 }
 .topnavbar-left a {
     float: left;
     font: normal normal bold 26px/31px Europa;
     letter-spacing: 0.52px;
-}
-.playlist-icon {
-    width: 35px;
+    color: #5bc057;
 }
 
-.topnavbar-right a {
+.topnavbar-right {
     float: right;
 }
 #howitworks {
@@ -59,13 +59,13 @@ footer{
     border-radius: 6px;
 }
 #connecttospotify {
-    color: #ffffff;
-    background-color: #5bc057;
-    border: none;
-    padding: 14px 25px 14px 25px;
-    border-radius: 6px;
     font: normal normal normal 15px/18px Europa;
     letter-spacing: -0.23px;
+    border: none;
+    padding: 14px 25px 14px 25px;
+    background: #5bc057 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+    color: #ffffff;
 }
 .topnavbar::after {
     content: "";
@@ -93,7 +93,7 @@ label {
 p {
     color: black;
     margin: 0;
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 input[type=email] {
@@ -136,22 +136,22 @@ form.searchbar input[type=text]{
     font-size: 17px;
     padding: 10px;
     border: none;
-    border-bottom: 1px solid grey;
+    border-bottom: 1px solid #121212;
     margin-left: auto;
     margin-right: auto;
-    width: 60%;
+    width: 75%;
     background: white;
 }
 form.searchbar button {
-    width: 10%;
+    /* width: 10%; */
     padding: 0px;
     margin: 0px;
     text-align: left;
     background: white;
-    color: black;
     font-size: 17px;
     border: none;
     cursor: pointer;
+    display: inline;
 }
 form.searchbar button:hover {
     background: black;
@@ -185,6 +185,9 @@ form.searchbar button:hover {
     form {
         top: 66px;
     }
+    p{
+        font-size: 1.1rem;
+    }
 }
 
 @media only screen and (min-width: 1200px) {
@@ -206,5 +209,8 @@ form.searchbar button:hover {
 
     form {
         top: 88px;
+    }
+    p{
+        font-size: 1.6rem;
     }
 }

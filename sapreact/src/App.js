@@ -12,9 +12,8 @@ function App() {
             </a>
           </div>
           <div className="topnavbar-right">
-            <a href="" id="connecttospotify">CONNECT TO SPOTIFY</a>
             <a href="" id="howitworks">HOW IT WORKS</a>
-
+            <a href="" id="connecttospotify">CONNECT TO SPOTIFY</a>
           </div>
         </div>
       </header>
@@ -23,10 +22,10 @@ function App() {
           <h1>Never lose a playlist again.</h1>
           <p>Search for a playlist and click the "." to add as a personal playlist on your Spotify account.</p>
 
-          <img className="panda" src="./images/panda.gif" alt="Waving panda"/>
+          {/* <img className="panda" src="./images/panda.gif" alt="Waving panda"/>
 
           <h1>COMING SOON</h1>
-          <p>We'll be launching soon, subscribe to be notified when we do.</p>
+          <p>We'll be launching soon, subscribe to be notified when we do.</p> */}
           <form className="searchbar" action="" method="post">
             <div>
               <label for="search">Search</label>
@@ -34,6 +33,10 @@ function App() {
               <button type="submit"><i className="fa fa-search"></i></button>
             </div>
           </form>
+
+          <div>
+
+          </div>
 
           {/* <form action="/notify-launch" method="post">
             <div className="input">
