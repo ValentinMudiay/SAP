@@ -16,7 +16,7 @@ const config     = require("./config/app"),
 
 // Services
 const clientCredentialService = require("./services/clientCredential");
-      
+
 // NPM Packages
 const bodyParser = require("body-parser"),
       path       = require("path"),
